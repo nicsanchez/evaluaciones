@@ -1,0 +1,17 @@
+<mat-toolbar>
+    <span class="title">Evaluaciones a docentes</span>
+    <span class="spacer"></span>
+    <button class="nav-button" [matMenuTriggerFor]="menu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item class="mat-icon-menu" (click)="goToMyProfile()">
+        <mat-icon>manage_accounts</mat-icon>
+        <span class="mat-icon-menu">Mi Perfil</span>
+      </button>
+      <button mat-menu-item (click)="logout()" class="mat-icon-menu">
+        <mat-icon>logout</mat-icon>
+        <span class="mat-icon-menu">Cerrar Sesión</span>
+      </button>
+    </mat-menu>
+</mat-toolbar>

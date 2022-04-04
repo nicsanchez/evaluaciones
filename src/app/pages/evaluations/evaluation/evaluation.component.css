@@ -1,0 +1,27 @@
+.add{
+    background-color: #026937;
+    color: white;
+}
+
+.download{
+    background-color: #8dc63f;
+    color: white;
+}
+
+.card-title{
+    font-family: 'Roboto-Regular', serif;
+    font-size: 30px;
+    color: #026937;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+    color: #026937 !important;
+}
+
+::ng-deep.mat-form-field-outline {
+    color: #026937 !important;
+} 
+
+::ng-deep.mat-form-field-ripple {
+    background-color: #026937 !important;;
+}

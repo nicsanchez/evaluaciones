@@ -1,1 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.title{
+    font-family: 'Roboto-Regular', serif;
+    padding: 10px;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+    color: #026937 !important;
+}
+
+::ng-deep.mat-form-field-underline {
+    background-color: #026937 !important;
+} 
+
+::ng-deep.mat-form-field-ripple {
+    background-color: #026937 !important;;
+}
+
+@font-face {
+    font-family: 'Roboto-Slab-Light';
+    src:url('/assets/fonts/RobotoSlab-Light.ttf')
+}
+
+@font-face {
+    font-family: 'Roboto-Regular';
+    src:url('/assets/fonts/Roboto-Regular.ttf')
+}

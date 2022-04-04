@@ -1,0 +1,37 @@
+<section class="vh-100 bg-img">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5 card-transparent">
+          <div class="card shadow-2-strong card-class">
+            <div class="card-body p-5">
+  
+              <h2 class="text-center login-title">Gestor de Evaluaciones a Docentes</h2>
+  
+              <form [formGroup]="form" (ngSubmit)="login()" autocomplete="off">
+                <div>
+                    <mat-form-field appearance="outline">
+                        <mat-label class="login-form">Usuario</mat-label>
+                        <input class="login-form" matInput type="text" formControlName="username" placeholder="Ingresa tu usuario">
+                        <mat-error *ngIf="form.controls['username'].hasError('required')">Este campo es requerido</mat-error>
+                    </mat-form-field>
+                </div>
+    
+                <div>
+                    <mat-form-field appearance="outline">
+                        <mat-label class="login-form">Contraseña </mat-label>
+                        <input class="login-form" matInput [type]="flag ? 'password' : 'text'"  placeholder="Ingresa tu contraseña" formControlName="password">
+                        <mat-icon (click)="flag=!flag" matSuffix>{{ flag ? 'visibility' : 'visibility_off' }}</mat-icon>
+                        <mat-error *ngIf="form.controls['password'].hasError('required')">Este campo es requerido</mat-error>
+                    </mat-form-field>
+                </div>
+    
+                <div class="text-center">
+                    <button class="login-form login-form-submit" mat-raised-button type="submit">Iniciar Sesión</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
