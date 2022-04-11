@@ -12,7 +12,25 @@
                 </div>
             </div>
         </mat-card-title>
-        <mat-card-content class="mt-4">
+        <mat-card-content>
+          <div class="row">
+            <form role="form" autocomplete="off" [formGroup]="form">    
+              <div class="col-10 col-md-6 d-inline-block">
+                <mat-form-field appearance="legacy">
+                  <mat-label class="login-form">Búsqueda por numero de documento </mat-label>
+                  <input matInput type="number" formControlName="search">
+                  <mat-error *ngIf="form.controls['search'].hasError('min')">Este campo debe superar 6 caracteres</mat-error>
+                  <mat-error *ngIf="form.controls['search'].hasError('max')">Este campo no debe superar 15 caracteres</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-2 d-inline-block">
+                <button mat-mini-fab class="search" (click)="getUsers()">
+                  <mat-icon>search</mat-icon>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="responsive-table">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 tabla">
                 <ng-container matColumnDef="position">
                   <th mat-header-cell *matHeaderCellDef class="tabla-header text-center"> No. </th>
@@ -54,6 +72,7 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+          </div>
         </mat-card-content>
         <mat-card-footer>
             <mat-paginator [length]="total"

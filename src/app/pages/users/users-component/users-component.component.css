@@ -28,3 +28,12 @@
 .tabla-edit{
     background-color: #0e7774;
 }
+
+mat-form-field {
+    width: 100%;
+}
+
+.search{
+    background-color: #8dc63f;
+    color: white;
+}

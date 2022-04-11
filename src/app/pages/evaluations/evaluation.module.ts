@@ -13,9 +13,12 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { CommonModule } from "@angular/common";
 import { NgxMatFileInputModule } from "@angular-material-components/file-input";
+import { MatTableModule } from "@angular/material/table";
+import { DownloadComponent } from './modals/download/download.component';
+import { ErrorsComponent } from './modals/errors/errors.component';
 
 @NgModule({
-  declarations: [EvaluationComponent, UploadComponent],
+  declarations: [EvaluationComponent, UploadComponent, DownloadComponent, ErrorsComponent],
   imports: [
     RouterModule.forChild(EvaluationRoutes),
     FormsModule,
@@ -28,7 +31,8 @@ import { NgxMatFileInputModule } from "@angular-material-components/file-input";
     MatFormFieldModule,
     MatInputModule,
     CommonModule,
-    NgxMatFileInputModule
+    NgxMatFileInputModule,
+    MatTableModule
   ],
   exports: [EvaluationComponent]
 })

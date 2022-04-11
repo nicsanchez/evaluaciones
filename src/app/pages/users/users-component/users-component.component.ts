@@ -2,8 +2,9 @@ import { Component, OnInit,ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { ToastrService } from 'ngx-toastr';
 import { UsersService } from 'src/app/services/users.service';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
 import { CreateEditUsersComponent } from '../modals/create-edit-users/create-edit-users.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-users-component',
@@ -18,34 +19,43 @@ export class UsersComponentComponent implements OnInit {
   page = 0;
   total = 0;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  public form: FormGroup;
 
   constructor(private usersService:UsersService, 
     private toastrService:ToastrService, 
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.buildForm();
     this.getUsers();
   }
 
-  getUsers(){
-    let token = localStorage.getItem('token');
-    let data = {
-      token,
-      itemsPerPage: this.itemsPerPage,
-    }
+  buildForm(){
+    this.form = this.fb.group({
+      search: ['',[Validators.min(100000),Validators.max(999999999999999),Validators.pattern('[0-9]+')]],
+    });
+  }
 
-    this.usersService.getUsers(data,this.page).subscribe(
-      (response:any)=>{
-        if(response.status == 200){
-          this.dataSource = response.data.data;
-          this.total = response.data.total; 
-        }else{
-          this.toastrService.error('No fue posible obtenerse los usuarios.','Error');
-        }
-      }, () => {
-        this.toastrService.error('Ocurrió un error al obtenerse los usuarios.','Error');
+  getUsers(){
+    if(this.form.valid){
+      let data = {
+        token: localStorage.getItem('token'),
+        itemsPerPage: this.itemsPerPage,
+        search: this.form.value.search
       }
-    );
+      this.usersService.getUsers(data,this.page).subscribe(
+        (response:any)=>{
+          if(response.status == 200){
+            this.dataSource = response.data.data;
+            this.total = response.data.total; 
+          }else{
+            this.toastrService.error('No fue posible obtenerse los usuarios.','Error');
+          }
+        }, () => {
+          this.toastrService.error('Ocurrió un error al obtenerse los usuarios.','Error');
+        }
+      );
+    }
   }
 
   changePage(event:any){

@@ -1,0 +1,35 @@
+::ng-deep .responsive-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+::ng-deep .responsive-table .mat-table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    display: table;
+    border-collapse: collapse;
+    margin: 0px;
+}
+
+::ng-deep .fixed-top{
+    z-index: 0 !important;
+}
+
+::ng-deep .responsive-table .mat-row,
+::ng-deep .responsive-table .mat-header-row {
+    display: table-row;
+}
+
+::ng-deep .responsive-table .mat-cell,
+::ng-deep .responsive-table .mat-header-cell {
+    word-wrap: initial;
+    display: table-cell;
+    padding: 0px 5px;
+    line-break: unset;
+    width: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+}

@@ -8,10 +8,24 @@
     color: white;
 }
 
+.download-individual{
+    background-color: #35944b;
+    color: white;
+}
+
 .card-title{
     font-family: 'Roboto-Regular', serif;
     font-size: 30px;
     color: #026937;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.search{
+    background-color: #137598;
+    color: white;
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
@@ -24,4 +38,20 @@
 
 ::ng-deep.mat-form-field-ripple {
     background-color: #026937 !important;;
+}
+
+.tabla {
+    width: 100% !important;
+}
+
+.tabla-header{
+    font-family: 'Roboto-Regular', serif;
+    color: #026937;
+    font-size: 15px;
+}
+
+.tabla-item{
+    font-family: 'Roboto-Slab-Light', serif;
+    color: black;  
+    font-size: 13px;
 }

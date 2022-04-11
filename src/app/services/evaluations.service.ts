@@ -16,4 +16,19 @@ export class EvaluationsService {
     };
     return this.http.post(environment.apiURL+'/evaluations/saveAttachments',data, {headers: this.headers});
   }
+
+  getEvaluations(data:any, page:any){
+    return this.http.post(environment.apiURL+'/evaluations/getEvaluations?page='+page,data);
+  }
+
+  downloadFileByFilename(data:any){
+    return this.http.post(environment.apiURL+'/evaluations/downloadFileByFilename',data);
+  }
+
+  downloadFilesByBulkFile(data:any){
+    this.headers = {
+      'Authorization': 'Bearer '+localStorage.getItem('token')
+    };
+    return this.http.post(environment.apiURL+'/evaluations/downloadFilesByBulkFile',data, {headers: this.headers});
+  }
 }
