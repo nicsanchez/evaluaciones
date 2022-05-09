@@ -13,11 +13,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class UsersComponentComponent implements OnInit {
 
-  displayedColumns: string[] = ['position', 'name', 'username', 'document', 'mail','actions'];
-  dataSource = [];
-  itemsPerPage = 5;
-  page = 0;
-  total = 0;
+  public displayedColumns: string[] = ['position', 'name', 'username', 'document', 'mail','actions'];
+  public dataSource = [];
+  public itemsPerPage = 5;
+  public page = 0;
+  public total = 0;
+  public loading = false;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public form: FormGroup;
 
@@ -38,6 +39,7 @@ export class UsersComponentComponent implements OnInit {
 
   getUsers(){
     if(this.form.valid){
+      this.loading = true;
       let data = {
         token: localStorage.getItem('token'),
         itemsPerPage: this.itemsPerPage,
@@ -45,13 +47,18 @@ export class UsersComponentComponent implements OnInit {
       }
       this.usersService.getUsers(data,this.page).subscribe(
         (response:any)=>{
+          this.loading = false;
           if(response.status == 200){
             this.dataSource = response.data.data;
-            this.total = response.data.total; 
+            this.total = response.data.total;
+            if(this.total == 0){
+              this.toastrService.warning('No se encontraron usuarios.','Advertencia');
+            }
           }else{
             this.toastrService.error('No fue posible obtenerse los usuarios.','Error');
           }
         }, () => {
+          this.loading = false;
           this.toastrService.error('Ocurrió un error al obtenerse los usuarios.','Error');
         }
       );

@@ -1,4 +1,4 @@
-<h1 mat-dialog-title class="card-title">{{title}} usuario</h1>
+<h1 mat-dialog-title class="card-title">{{title}} Usuario</h1>
 
 <form role="form" (ngSubmit)="onSubmit()" [formGroup]="form" autocomplete="off">
     <div mat-dialog-content>
@@ -58,10 +58,13 @@
                 </mat-form-field>
             </div>
         </div>
-
-        <div mat-dialog-actions class="btn-center">
+        <div *ngIf="loading" class="d-flex justify-content-center">
+            <app-loading [value]="30"></app-loading>
+        </div>
+        <div *ngIf="!loading" mat-dialog-actions class="btn-center">
             <button mat-raised-button class="btn-danger" matDialogClose>Cancelar</button>
             <button mat-raised-button class="btn-success" type="submit">Guardar</button>
         </div>
+        
     </div>
 </form>

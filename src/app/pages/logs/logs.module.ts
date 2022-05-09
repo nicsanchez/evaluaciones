@@ -13,6 +13,7 @@ import { CommonModule } from "@angular/common";
 import { NgxMatFileInputModule } from "@angular-material-components/file-input";
 import { MatTableModule } from "@angular/material/table";
 import { LogsComponent } from './logs/logs.component';
+import { ComponentsModule } from "src/app/components/components.module";
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { LogsComponent } from './logs/logs.component';
     MatInputModule,
     CommonModule,
     NgxMatFileInputModule,
-    MatTableModule
+    MatTableModule,
+    ComponentsModule
   ],
   exports: []
 })

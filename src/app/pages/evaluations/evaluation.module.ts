@@ -16,6 +16,7 @@ import { NgxMatFileInputModule } from "@angular-material-components/file-input";
 import { MatTableModule } from "@angular/material/table";
 import { DownloadComponent } from './modals/download/download.component';
 import { ErrorsComponent } from './modals/errors/errors.component';
+import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
   declarations: [EvaluationComponent, UploadComponent, DownloadComponent, ErrorsComponent],
@@ -32,7 +33,8 @@ import { ErrorsComponent } from './modals/errors/errors.component';
     MatInputModule,
     CommonModule,
     NgxMatFileInputModule,
-    MatTableModule
+    MatTableModule,
+    ComponentsModule
   ],
   exports: [EvaluationComponent]
 })

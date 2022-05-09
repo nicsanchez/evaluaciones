@@ -13,6 +13,7 @@ import { CreateEditUsersComponent } from './modals/create-edit-users/create-edit
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from "@angular/common";
+import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
   declarations: [UsersComponentComponent, CreateEditUsersComponent],
@@ -28,7 +29,8 @@ import { CommonModule } from "@angular/common";
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    CommonModule 
+    CommonModule,
+    ComponentsModule
   ],
   exports: [UsersComponentComponent]
 })

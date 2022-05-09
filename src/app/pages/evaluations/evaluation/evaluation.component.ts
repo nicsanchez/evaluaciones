@@ -14,13 +14,14 @@ import { UploadComponent } from '../modals/upload/upload.component';
 })
 export class EvaluationComponent implements OnInit {
 
-  displayedColumns: string[] = ['position', 'name', 'document', 'filename', 'created_at','actions'];
-  dataSource = [];
-  itemsPerPage = 5;
-  page = 0;
-  total = 0;
+  public displayedColumns: string[] = ['position', 'name', 'document', 'filename', 'created_at','actions'];
+  public dataSource = [];
+  public itemsPerPage = 5;
+  public page = 0;
+  public total = 0;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public form: FormGroup;
+  public loading = false;
 
   constructor(private dialog: MatDialog, private evaluationsService: EvaluationsService, private toastrService:ToastrService,private fb: FormBuilder) { }
 
@@ -43,6 +44,8 @@ export class EvaluationComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result === 'ok') {
+        this.page = 0;
+        this.total = 0;
         this.getEvaluations();
       }
     });
@@ -62,16 +65,22 @@ export class EvaluationComponent implements OnInit {
         itemsPerPage: this.itemsPerPage,
         search: this.form.value.search
       }
+      this.loading = true;
       this.evaluationsService.getEvaluations(data,this.page).subscribe(
         (response:any) => {
+          this.loading = false;
           if(response.status == 200){
             this.dataSource = response.data.data;
-            this.total = response.data.total; 
+            this.total = response.data.total;
+            if(this.total == 0){
+              this.toastrService.warning('No se encontraron evaluaciones.','Advertencia');
+            }
           }else{
             this.toastrService.error('No fue posible obtenerse las evaluaciones cargadas en el servidor','Error');
           }
         },
         () => {
+          this.loading = false;
           this.toastrService.error('Ocurrió un error al obtenerse las evaluaciones cargadas en el servidor','Error');
         }
       );

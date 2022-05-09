@@ -3,7 +3,7 @@
         <mat-card-title>
             <div class="row">
                 <div class="col-10">
-                    <h1 class="card-title">Listado de usuarios</h1>
+                    <h1 class="card-title">Listado de Usuarios</h1>
                 </div>
                 <div class="col-2" align="end">
                     <button mat-mini-fab class="add" (click)="createUser()">
@@ -31,7 +31,10 @@
             </form>
           </div>
           <div class="responsive-table">
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 tabla">
+            <div *ngIf="loading" class="mt-5 d-flex justify-content-center">
+              <app-loading [value]="100"></app-loading>
+            </div>
+            <table *ngIf="!loading" mat-table [dataSource]="dataSource" class="mat-elevation-z1 tabla">
                 <ng-container matColumnDef="position">
                   <th mat-header-cell *matHeaderCellDef class="tabla-header text-center"> No. </th>
                   <td mat-cell *matCellDef="let element" class="tabla-item text-center"> {{element.id}} </td>

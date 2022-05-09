@@ -12,7 +12,10 @@
             </div>
         </div> 
         <div class="row">
-            <div mat-dialog-actions class="btn-center">
+            <div *ngIf="loading" class="d-flex justify-content-center">
+                <app-loading [value]="30"></app-loading>
+            </div>
+            <div *ngIf="!loading" mat-dialog-actions class="btn-center">
                 <button mat-raised-button class="btn-danger" matDialogClose>Cancelar</button>
                 <button mat-raised-button class="btn-success" type="submit">Guardar</button>
             </div>

@@ -15,6 +15,7 @@ export class LogsComponent implements OnInit {
   itemsPerPage = 5;
   page = 0;
   total = 0;
+  public loading: boolean = false;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   constructor(private logsService: LogsService, private toastrService:ToastrService) { }
 
@@ -27,16 +28,22 @@ export class LogsComponent implements OnInit {
       token: localStorage.getItem('token'),
       itemsPerPage: this.itemsPerPage
     }
+    this.loading = true;
     this.logsService.getLogs(data,this.page).subscribe(
       (response:any) => {
+        this.loading = false;
         if(response.status == 200){
           this.dataSource = response.data.data;
-          this.total = response.data.total; 
+          this.total = response.data.total;
+          if(this.total == 0){
+            this.toastrService.warning('No se encontró registro de actividad.','Advertencia');
+          }
         }else{
           this.toastrService.error('No fue posible obtenerse el registro de actividad almacenado en el servidor','Error');
         }
       },
       () => {
+        this.loading = false;
         this.toastrService.error('Ocurrió un error al obtenerse el registro de actividad almacenado en el servidor','Error');
       }
     );

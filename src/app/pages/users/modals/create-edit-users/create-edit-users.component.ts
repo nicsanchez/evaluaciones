@@ -10,9 +10,10 @@ import { UsersService } from 'src/app/services/users.service';
   styleUrls: ['./create-edit-users.component.css']
 })
 export class CreateEditUsersComponent implements OnInit {
-  title:any;
-  form: FormGroup;
-  editing: boolean;
+  public title:any;
+  public loading: boolean = false;
+  public form: FormGroup;
+  public editing: boolean;
 
   constructor(
     private dialogRef: MatDialogRef<CreateEditUsersComponent>,
@@ -63,9 +64,10 @@ export class CreateEditUsersComponent implements OnInit {
       document: this.form.controls['document'].value,
       token: localStorage.getItem('token'),
     }
-
+    this.loading = true;
     this.userService.createUser(data).subscribe(
       (response:any) => {
+        this.loading = false;
         if(response.status == 200){
           this.toastrService.success('Se ha creado el usuario exitosamente','Exito');
           this.dialogRef.close('ok');
@@ -74,18 +76,22 @@ export class CreateEditUsersComponent implements OnInit {
         }
       },
       (error) => {
+        this.loading = false;
         if(error.status == 422){
+          let errors = '<ul>';
           if(error.error.errors.username !== null && error.error.errors.username !== undefined){
-            this.toastrService.error('El campo usuario ya está registrado en base de datos.','Error');
+            errors += '<li>El campo usuario ya está registrado en base de datos.</li>';
           }
 
           if(error.error.errors.mail !== null && error.error.errors.mail !== undefined){
-            this.toastrService.error('El campo correo electrónico ya está registrado en base de datos.','Error');
+            errors += '<li>El campo correo electrónico ya está registrado en base de datos.</li>';
           }
 
           if(error.error.errors.document !== null && error.error.errors.document !== undefined){
-            this.toastrService.error('El campo documento ya está registrado en base de datos.','Error');
+            errors += '<li>El campo documento ya está registrado en base de datos.</li>';
           }
+          errors += '</ul>';
+          this.toastrService.error(errors,'Listado de Errores',{ closeButton: true, enableHtml: true })
         }else{
           this.toastrService.error('Ocurrió un error al crearse el usuario','Error');
         }
@@ -107,9 +113,10 @@ export class CreateEditUsersComponent implements OnInit {
         document: this.form.controls['document'].value,
       }
     }
-
+    this.loading = true;
     this.userService.updateUser(data).subscribe(
       (response:any) => {
+        this.loading = false;
         if(response.status == 200){
           this.toastrService.success('Se ha creado el usuario exitosamente','Exito');
           this.dialogRef.close('ok');
@@ -118,18 +125,22 @@ export class CreateEditUsersComponent implements OnInit {
         }
       },
       (error) => {
+        this.loading = false;
         if(error.status == 422){
-          if(error.error.errors.username !== null && error.error.errors.username !== undefined){
-            this.toastrService.error('El campo usuario ya está registrado en base de datos.','Error');
+          let errors = '<ul>';
+          if(error.error.errors['data.username'] !== null && error.error.errors['data.username'] !== undefined){
+            errors += '<li>El campo usuario ya está registrado en base de datos.</li>';
           }
 
-          if(error.error.errors.mail !== null && error.error.errors.mail !== undefined){
-            this.toastrService.error('El campo correo electrónico ya está registrado en base de datos.','Error');
+          if(error.error.errors['data.email'] !== null && error.error.errors['data.email'] !== undefined){
+            errors += '<li>El campo correo electrónico ya está registrado en base de datos.</li>';
           }
 
-          if(error.error.errors.document !== null && error.error.errors.document !== undefined){
-            this.toastrService.error('El campo documento ya está registrado en base de datos.','Error');
+          if(error.error.errors['data.document'] !== null && error.error.errors['data.document'] !== undefined){
+            errors += '<li>El campo documento ya está registrado en base de datos.</li>';
           }
+          errors += '</ul>';
+          this.toastrService.error(errors,'Listado de Errores',{ closeButton: true, enableHtml: true })
         }else{
           this.toastrService.error('Ocurrió un error al crearse el usuario','Error');
         }

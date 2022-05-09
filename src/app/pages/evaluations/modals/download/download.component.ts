@@ -11,7 +11,7 @@ import { ErrorsComponent } from '../errors/errors.component';
   styleUrls: ['./download.component.css']
 })
 export class DownloadComponent implements OnInit {
-
+  public loading: boolean = false;
   form: FormGroup;
   public formDataAttachment = new FormData();
   acceptFiles = ['.xls','.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
@@ -41,8 +41,10 @@ export class DownloadComponent implements OnInit {
 
   onSubmit(){
     if(this.form.valid){
+      this.loading = true;
       this.evaluationsService.downloadFilesByBulkFile(this.formDataAttachment).subscribe(
         (response:any) => {
+          this.loading = false;
           if(response.status == 200){
             if(response.evaluations != null && response.evaluations != undefined && response.evaluations.length != 0){
               this.toastrService.success('Se han descargado las evaluaciones exitosamente','Exito');
@@ -66,6 +68,7 @@ export class DownloadComponent implements OnInit {
           }
         },
         () => {
+          this.loading = false;
           this.toastrService.error('Ocurrió un error al descargarse las evaluaciones','Error');
         }
       );

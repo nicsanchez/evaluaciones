@@ -9,18 +9,16 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatListModule} from '@angular/material/list';
 import {MatMenuModule} from '@angular/material/menu';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { UsersLayoutComponent } from './layouts/users-layout/users-layout.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { ComponentsModule } from './components/components.module';
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
-    SidebarComponent,
     AuthLayoutComponent,
     UsersLayoutComponent],
   imports: [
@@ -33,7 +31,9 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     MatListModule,
     MatMenuModule,
     HttpClientModule,
-    ToastrModule.forRoot()
+    MatProgressSpinnerModule,
+    ToastrModule.forRoot(),
+    ComponentsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

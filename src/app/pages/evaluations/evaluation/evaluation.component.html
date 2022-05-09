@@ -34,7 +34,10 @@
                 </form>
             </div>
             <div class="responsive-table">
-                <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 tabla">
+                <div *ngIf="loading" class="mt-5 d-flex justify-content-center">
+                  <app-loading [value]="100"></app-loading>
+                </div>
+                <table *ngIf="!loading" mat-table [dataSource]="dataSource" class="mat-elevation-z1 tabla">
                     <ng-container matColumnDef="position">
                       <th mat-header-cell *matHeaderCellDef class="tabla-header text-center"> No. </th>
                       <td mat-cell *matCellDef="let element" class="tabla-item text-center"> {{element.id}} </td>

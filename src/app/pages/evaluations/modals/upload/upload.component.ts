@@ -12,6 +12,7 @@ import { EvaluationsService } from 'src/app/services/evaluations.service';
 export class UploadComponent implements OnInit {
 
   form: FormGroup;
+  public loading: boolean = false;
   public formDataAttachment = new FormData();
   acceptFiles = ['.pdf','application/pdf'];
   constructor(private fb: FormBuilder,private toastrService: ToastrService, private evaluationsService:EvaluationsService, private dialogRef: MatDialogRef<UploadComponent>) { }
@@ -51,8 +52,10 @@ export class UploadComponent implements OnInit {
 
   onSubmit(){
     if(this.form.valid){
+      this.loading = true;
       this.evaluationsService.saveAttachments(this.formDataAttachment).subscribe(
         (response:any) => {
+          this.loading = false;
           if(response.status == 200){
             this.toastrService.success('Se han cargado las evaluaciones exitosamente','Exito');
             this.dialogRef.close('ok');
@@ -70,6 +73,7 @@ export class UploadComponent implements OnInit {
           }
         },
         () => {
+          this.loading = false;
           this.toastrService.error('Ocurrió un error al cargarse las evaluaciones','Error');
         }
       );
