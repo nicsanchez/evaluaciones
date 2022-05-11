@@ -17,13 +17,12 @@ export class MyProfileComponent implements OnInit {
     username:'',
     password:'',
   };
-  id: any;
   form: FormGroup;
+  public loading: boolean = false;
 
   constructor(private fb: FormBuilder, private toastrService: ToastrService,private userService: UsersService) { }
 
   ngOnInit(): void {
-    this.id = localStorage.getItem('user');
     this.buildForm();
     this.getMyInformation();
   }
@@ -41,7 +40,6 @@ export class MyProfileComponent implements OnInit {
 
   getMyInformation(){
     let data = {
-      id: this.id,
       token: localStorage.getItem('token')
     }
     this.userService.getUser(data).subscribe(
@@ -63,7 +61,6 @@ export class MyProfileComponent implements OnInit {
       let data = {
         token: localStorage.getItem('token'),
         data: {
-          id: this.id,
           username: this.form.controls['username'].value,
           name: this.form.controls['name'].value,
           lastname: this.form.controls['lastname'].value,
@@ -72,8 +69,10 @@ export class MyProfileComponent implements OnInit {
           document: this.form.controls['document'].value,
         }
       }
-      this.userService.updateUser(data).subscribe(
+      this.loading = true;
+      this.userService.updatePersonalData(data).subscribe(
         (response:any) => {
+          this.loading = false;
           if(response.status == 200){
             this.getMyInformation();
             this.toastrService.success('Se ha actualizado su información personal exitosamente','Exito');
@@ -82,18 +81,22 @@ export class MyProfileComponent implements OnInit {
           }
         },
         (error) => {
+          this.loading = false;
           if(error.status == 422){
-            if(error.error.errors.username !== null && error.error.errors.username !== undefined){
-              this.toastrService.error('El campo usuario ya está registrado en base de datos.','Error');
+            let errors = '<ul>';
+            if(error.error.errors['data.username'] !== null && error.error.errors['data.username'] !== undefined){
+              errors += '<li>El campo usuario ya está registrado en base de datos.</li>';
             }
-  
-            if(error.error.errors.mail !== null && error.error.errors.mail !== undefined){
-              this.toastrService.error('El campo correo electrónico ya está registrado en base de datos.','Error');
+
+            if(error.error.errors['data.email'] !== null && error.error.errors['data.email'] !== undefined){
+              errors += '<li>El campo correo electrónico ya está registrado en base de datos.</li>';
             }
-  
-            if(error.error.errors.document !== null && error.error.errors.document !== undefined){
-              this.toastrService.error('El campo documento ya está registrado en base de datos.','Error');
+
+            if(error.error.errors['data.document'] !== null && error.error.errors['data.document'] !== undefined){
+              errors += '<li>El campo documento ya está registrado en base de datos.</li>';
             }
+            errors += '</ul>';
+            this.toastrService.error(errors,'Listado de Errores',{ closeButton: true, enableHtml: true })
           }else{
             this.toastrService.error('Ocurrió un error al actualizarse su información personal','Error');
           }

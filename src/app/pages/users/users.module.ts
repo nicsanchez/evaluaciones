@@ -14,6 +14,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from "@angular/common";
 import { ComponentsModule } from "src/app/components/components.module";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
   declarations: [UsersComponentComponent, CreateEditUsersComponent],
@@ -30,7 +31,8 @@ import { ComponentsModule } from "src/app/components/components.module";
     MatFormFieldModule,
     MatInputModule,
     CommonModule,
-    ComponentsModule
+    ComponentsModule,
+    MatSelectModule
   ],
   exports: [UsersComponentComponent]
 })

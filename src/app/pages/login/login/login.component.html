@@ -25,7 +25,10 @@
                     </mat-form-field>
                 </div>
     
-                <div class="text-center">
+                <div *ngIf="loading" class="d-flex justify-content-center">
+                  <app-loading [value]="30"></app-loading>
+                </div>
+                <div *ngIf="!loading" class="text-center">
                     <button class="login-form login-form-submit" mat-raised-button type="submit">Iniciar Sesión</button>
                 </div>
               </form>

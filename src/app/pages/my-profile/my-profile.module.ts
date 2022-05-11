@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MyProfileComponent } from "./my-profile.component";
 import { MyProfileRoutes } from "./my-profile.routing";
 import { MatCardModule } from "@angular/material/card";
+import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
   declarations: [MyProfileComponent],
@@ -21,7 +22,8 @@ import { MatCardModule } from "@angular/material/card";
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    CommonModule
+    CommonModule,
+    ComponentsModule
   ],
   exports: [MyProfileComponent]
 })

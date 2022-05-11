@@ -25,6 +25,10 @@ export class UsersService {
     return this.http.post(environment.apiURL+'/users/updateUser',data);
   }
 
+  updatePersonalData(data:any){
+    return this.http.post(environment.apiURL+'/users/updatePersonalData',data);
+  }
+
   getUser(data:any){
     return this.http.post(environment.apiURL+'/users/getUser',data);
   }

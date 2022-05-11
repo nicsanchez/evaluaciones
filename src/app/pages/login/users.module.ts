@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import { CommonModule } from '@angular/common';  
+import { ComponentsModule } from "src/app/components/components.module";
 
 @NgModule({
   declarations: [LoginComponent],
@@ -19,7 +20,8 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    CommonModule
+    CommonModule,
+    ComponentsModule
   ],
   exports: [LoginComponent]
 })

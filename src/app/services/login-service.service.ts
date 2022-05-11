@@ -7,17 +7,28 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginServiceService {
 
+  private rol:String = '';
+
   constructor(private http: HttpClient) { }
 
   login(data:any){
     return this.http.post(environment.apiURL+'/login',data);
   }
 
-  getUserInformation(data:any){
-    return this.http.post(environment.apiURL+'/user',data);
-  }
-
   logout(data:any){
     return this.http.post(environment.apiURL+'/logout',data);
   }
+
+  getPermissions(data:any){
+    return this.http.post(environment.apiURL+'/roles/getPermissions',data);
+  }
+
+  setGlobalRol(globalRol:String){
+    this.rol = globalRol;
+  }
+
+  getGlobalRol(){
+    return this.rol;
+  }
+
 }

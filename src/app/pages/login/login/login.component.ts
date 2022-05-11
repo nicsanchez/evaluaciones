@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
 
   form: FormGroup;
   flag: boolean = true;
+  public loading = false;
 
   constructor(private fb: FormBuilder, 
     private loginService: LoginServiceService,
@@ -38,12 +39,16 @@ export class LoginComponent implements OnInit {
         username: this.form.controls['username'].value,
         password: this.form.controls['password'].value
       };
+      this.loading = true;
       this.loginService.login(data).subscribe(
         (success:any) => {
+          this.loading = false;
           localStorage.setItem('token',success.token);
-          this.getUserInformation(success.token);
+          this.router.navigate(['users']);
+          this.toastrService.success('Ha iniciado sesión exitosamente.','Exito');
         },
         (error) => {
+          this.loading = false;
           if(error.status == 400){
             this.toastrService.error('Usuario y/o contraseña invalidos','Error');
           }else if(error.status == 404){
@@ -54,21 +59,5 @@ export class LoginComponent implements OnInit {
         }
       );
     };
-  }
-
-  getUserInformation(token:any){
-    let data = {
-      token:token
-    }
-    this.loginService.getUserInformation(data).subscribe(
-      (data:any) => {
-        localStorage.setItem('user',data.id);
-        this.router.navigate(['users']);
-        this.toastrService.success('Ha iniciado sesión exitosamente.','Exito');
-      },
-      () => {
-        this.toastrService.error('No fue posible obtenerse los datos del usuario en sesión.','Error');
-      }
-    );
   }
 }

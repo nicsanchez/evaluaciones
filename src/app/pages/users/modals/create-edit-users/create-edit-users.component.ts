@@ -2,6 +2,7 @@ import { Component, OnInit, Inject} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { RolesService } from 'src/app/services/roles.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -14,16 +15,19 @@ export class CreateEditUsersComponent implements OnInit {
   public loading: boolean = false;
   public form: FormGroup;
   public editing: boolean;
+  public roles:any;
 
   constructor(
     private dialogRef: MatDialogRef<CreateEditUsersComponent>,
     private fb: FormBuilder,
     private userService: UsersService,
     private toastrService: ToastrService,
-    @Inject(MAT_DIALOG_DATA) private data: any
+    @Inject(MAT_DIALOG_DATA) private data: any,
+    private rolesService: RolesService,
     ) { }
 
   ngOnInit(): void {
+    this.getAllRoles();
     this.title = this.data.title;
     this.editing = this.data.editing;
     this.buildForm();
@@ -38,6 +42,7 @@ export class CreateEditUsersComponent implements OnInit {
       document: [this.editing ? this.data.user.document : '', [Validators.required,Validators.min(100000),Validators.max(999999999999999)]],
       username: [this.editing ? this.data.user.username : '', [Validators.required]],
       password: ['', this.editing ? [] : [Validators.required]],
+      rol: [this.editing ? this.data.user.rol: '', [Validators.required]],
     });
   }
 
@@ -49,7 +54,6 @@ export class CreateEditUsersComponent implements OnInit {
       }else{
         this.createNewUser();
       }
-
     }
   }
 
@@ -62,6 +66,7 @@ export class CreateEditUsersComponent implements OnInit {
       mail: this.form.controls['mail'].value,
       password: this.form.controls['password'].value,
       document: this.form.controls['document'].value,
+      rol: this.form.controls['rol'].value,
       token: localStorage.getItem('token'),
     }
     this.loading = true;
@@ -111,6 +116,7 @@ export class CreateEditUsersComponent implements OnInit {
         email: this.form.controls['mail'].value,
         password: this.form.controls['password'].value,
         document: this.form.controls['document'].value,
+        rol: this.form.controls['rol'].value,
       }
     }
     this.loading = true;
@@ -146,5 +152,23 @@ export class CreateEditUsersComponent implements OnInit {
         }
       }
     )
+  }
+
+  getAllRoles(){
+    let data = {
+      token: localStorage.getItem('token'),
+    }
+    this.rolesService.getAllRoles(data).subscribe(
+      (response:any) => {
+        if(response.status == 200){
+          this.roles = response.data;
+        }else{
+          this.toastrService.error('No fue posible obtenerse los roles de usuario.','Error');
+        }
+      },
+      () => {
+        this.toastrService.error('Ocurrió un error al obtenerse los roles de usuario.','Error');
+      }
+    );
   }
 }
