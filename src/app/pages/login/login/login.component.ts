@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LoginServiceService } from 'src/app/services/login-service.service';
+import { throwErrorAndLogout } from 'src/utils/permissions.utils';
 
 @Component({
   selector: 'app-login',
@@ -73,28 +74,25 @@ export class LoginComponent implements OnInit {
     const data = { token };
     this.loginService.getPermissions(data).subscribe(
       (response: any) => {
-        if (response.status == 200) {
-          this.loginService.setGlobalRol(response.data['0']['key']);
-          this.router.navigate(['evaluations']);
-          this.toastrService.success(
-            'Ha iniciado sesión exitosamente.',
-            'Exito'
-          );
-        } else {
-          this.toastrService.error(
-            'No fue posible obtenerse los permisos del usuario en el aplicativo.',
-            'Error'
-          );
-          this.loginService.logout(data);
-        }
+        this.setGlobalRoleAndGoToEvaluations(response, data);
       },
       () => {
-        this.toastrService.error(
-          'Ocurrió un error al obtenerse los permisos del usuario en el aplicativo.',
-          'Error'
-        );
-        this.loginService.logout(data);
+        const errorMessage =
+          'Ocurrió un error al obtenerse los permisos del usuario en el aplicativo.';
+        throwErrorAndLogout(data, errorMessage, this);
       }
     );
+  }
+
+  setGlobalRoleAndGoToEvaluations(response: any, data: any) {
+    if (response.status == 200) {
+      this.loginService.setGlobalRol(response.data['0']['key']);
+      this.router.navigate(['evaluations']);
+      this.toastrService.success('Ha iniciado sesión exitosamente.', 'Exito');
+    } else {
+      const errorMessage =
+        'No fue posible obtenerse los permisos del usuario en el aplicativo.';
+      throwErrorAndLogout(data, errorMessage, this);
+    }
   }
 }

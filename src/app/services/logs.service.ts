@@ -10,7 +10,7 @@ export class LogsService {
 
   getLogs(data: any, page: any) {
     return this.http.post(
-      environment.apiURL + '/logs/getLogs?page=' + page,
+      `${environment.apiURL}/logs/getLogs?page=${page}`,
       data
     );
   }

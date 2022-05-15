@@ -3,6 +3,6 @@ export const throwErrorAndLogout = (
   errorMessage: any,
   objectThis: any
 ) => {
-  objectThis.error(errorMessage, 'Error');
+  objectThis.toastrService.error(errorMessage, 'Error');
   objectThis.loginService.logout(data);
 };

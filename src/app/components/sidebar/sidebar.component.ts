@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { LoginServiceService } from 'src/app/services/login-service.service';
+import { throwErrorAndLogout } from 'src/utils/permissions.utils';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,10 +9,7 @@ import { LoginServiceService } from 'src/app/services/login-service.service';
   styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
-  constructor(
-    private loginService: LoginServiceService,
-    private toastrService: ToastrService
-  ) {}
+  constructor(private loginService: LoginServiceService) {}
 
   public isExpanded = false;
 
@@ -41,28 +39,28 @@ export class SidebarComponent implements OnInit {
     };
     this.loginService.getPermissions(data).subscribe(
       (response: any) => {
-        if (response.status == 200) {
-          this.loginService.setGlobalRol(response.data['0']['key']);
-          if (response.data['0']['key'] == 'ADMIN') {
-            this.menuItems = this.ROUTES_ADMIN;
-          } else {
-            this.menuItems = this.ROUTES_USER;
-          }
-        } else {
-          this.toastrService.error(
-            'No fue posible obtenerse los permisos del usuario en el aplicativo.',
-            'Error'
-          );
-          this.loginService.logout(data);
-        }
+        this.setGlobalErrorAndShowAvailableRoutes(response, data);
       },
       () => {
-        this.toastrService.error(
-          'Ocurrió un error al obtenerse los permisos del usuario en el aplicativo.',
-          'Error'
-        );
-        this.loginService.logout(data);
+        const errorMessage =
+          'Ocurrió un error al obtenerse los permisos del usuario en el aplicativo.';
+        throwErrorAndLogout(data, errorMessage, this);
       }
     );
+  }
+
+  setGlobalErrorAndShowAvailableRoutes(response: any, data: any) {
+    if (response.status == 200) {
+      this.loginService.setGlobalRol(response.data['0']['key']);
+      if (response.data['0']['key'] == 'ADMIN') {
+        this.menuItems = this.ROUTES_ADMIN;
+      } else {
+        this.menuItems = this.ROUTES_USER;
+      }
+    } else {
+      const errorMessage =
+        'No fue posible obtenerse los permisos del usuario en el aplicativo.';
+      throwErrorAndLogout(data, errorMessage, this);
+    }
   }
 }

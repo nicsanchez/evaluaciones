@@ -21,26 +21,27 @@ export class EvaluationsService {
     );
   }
 
-  getEvaluations(data: any, page: any) {
+  getEvaluations(data: any, page: Number) {
     return this.http.post(
-      environment.apiURL + '/evaluations/getEvaluations?page=' + page,
+      `${environment.apiURL}/evaluations/getEvaluations?page=${page}`,
       data
     );
   }
 
   downloadFileByFilename(data: any) {
     return this.http.post(
-      environment.apiURL + '/evaluations/downloadFileByFilename',
+      `${environment.apiURL}/evaluations/downloadFileByFilename`,
       data
     );
   }
 
   downloadFilesByBulkFile(data: any) {
+    const token = localStorage.getItem('token');
     this.headers = {
-      Authorization: 'Bearer ' + localStorage.getItem('token'),
+      Authorization: `Bearer ${token}`,
     };
     return this.http.post(
-      environment.apiURL + '/evaluations/downloadFilesByBulkFile',
+      `${environment.apiURL}/evaluations/downloadFilesByBulkFile`,
       data,
       { headers: this.headers }
     );

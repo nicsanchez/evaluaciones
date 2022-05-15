@@ -9,6 +9,6 @@ export class RolesService {
   constructor(private http: HttpClient) {}
 
   getAllRoles(data: any) {
-    return this.http.post(environment.apiURL + '/roles/getAllRoles', data);
+    return this.http.post(`${environment.apiURL}/roles/getAllRoles`, data);
   }
 }

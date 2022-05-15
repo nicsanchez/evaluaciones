@@ -17,11 +17,11 @@ export class LoginServiceService {
   ) {}
 
   login(data: any) {
-    return this.http.post(environment.apiURL + '/login', data);
+    return this.http.post(`${environment.apiURL}/login`, data);
   }
 
   logout(data: any) {
-    this.http.post(environment.apiURL + '/logout', data).subscribe(
+    this.http.post(`${environment.apiURL}/logout`, data).subscribe(
       (response: any) => {
         if (response.status == 200) {
           this.toastrService.success(
@@ -44,7 +44,7 @@ export class LoginServiceService {
   }
 
   getPermissions(data: any) {
-    return this.http.post(environment.apiURL + '/roles/getPermissions', data);
+    return this.http.post(`${environment.apiURL}/roles/getPermissions`, data);
   }
 
   setGlobalRol(globalRol: String) {

@@ -24,7 +24,7 @@ export class EvaluationComponent implements OnInit {
   ];
   public dataSource = [];
   public itemsPerPage = 5;
-  public page = 0;
+  public page: Number = 0;
   public total = 0;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public form: FormGroup;
@@ -131,10 +131,7 @@ export class EvaluationComponent implements OnInit {
     this.evaluationsService.downloadFileByFilename(data).subscribe(
       (response: any) => {
         if (response.status == 200) {
-          var a = document.createElement('a');
-          a.href = 'data:application/pdf;base64,' + response.data;
-          a.download = name + '.pdf';
-          a.click();
+          this.downloadPDFEvaluationFromBase64(response.data, name);
         } else {
           this.toastrService.error(
             'No fue posible descargarse la evaluacion cargada en el servidor',
@@ -151,6 +148,13 @@ export class EvaluationComponent implements OnInit {
     );
   }
 
+  downloadPDFEvaluationFromBase64(pdfInBase64: String, name: String) {
+    var a = document.createElement('a');
+    a.href = `data:application/pdf;base64, ${pdfInBase64}`;
+    a.download = name + '.pdf';
+    a.click();
+  }
+
   ngAfterViewInit() {
     this.getPermissions();
   }
@@ -161,7 +165,13 @@ export class EvaluationComponent implements OnInit {
     };
     this.loginService.getPermissions(data).subscribe(
       (response: any) => {
-        this.setAdminRole(response, data);
+        if (response.status == 200) {
+          this.setAdminRole(response);
+        } else {
+          const errorMessage =
+            'No fue posible obtenerse los permisos del usuario en el aplicativo.';
+          throwErrorAndLogout(data, errorMessage, this);
+        }
       },
       () => {
         const errorMessage =
@@ -171,17 +181,11 @@ export class EvaluationComponent implements OnInit {
     );
   }
 
-  setAdminRole(response: any, data: any) {
-    if (response.status == 200) {
-      if (response.data['0']['key'] == 'ADMIN') {
-        this.isAdmin = true;
-      } else {
-        this.isAdmin = false;
-      }
+  setAdminRole(response: any) {
+    if (response.data['0']['key'] == 'ADMIN') {
+      this.isAdmin = true;
     } else {
-      const errorMessage =
-        'No fue posible obtenerse los permisos del usuario en el aplicativo.';
-      throwErrorAndLogout(data, errorMessage, this);
+      this.isAdmin = false;
     }
   }
 }
