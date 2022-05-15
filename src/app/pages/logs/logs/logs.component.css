@@ -1,21 +1,21 @@
 .tabla {
-    width: 100% !important;
+  width: 100% !important;
 }
 
-.tabla-header{
-    font-family: 'Roboto-Regular', serif;
-    color: #026937;
-    font-size: 15px;
+.tabla-header {
+  font-family: "Roboto-Regular", serif;
+  color: #026937;
+  font-size: 15px;
 }
 
-.tabla-item{
-    font-family: 'Roboto-Slab-Light', serif;
-    color: black;  
-    font-size: 13px;
+.tabla-item {
+  font-family: "Roboto-Slab-Light", serif;
+  color: black;
+  font-size: 13px;
 }
 
-.card-title{
-    font-family: 'Roboto-Regular', serif;
-    font-size: 30px;
-    color: #026937;
+.card-title {
+  font-family: "Roboto-Regular", serif;
+  font-size: 30px;
+  color: #026937;
 }

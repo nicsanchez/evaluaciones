@@ -1,14 +1,14 @@
-import { Routes } from "@angular/router";
-import { EvaluationComponent } from "./evaluation/evaluation.component";
+import { Routes } from '@angular/router';
+import { EvaluationComponent } from './evaluation/evaluation.component';
 
 export const EvaluationRoutes: Routes = [
   {
-    path: "evaluations",
+    path: 'evaluations',
     children: [
       {
-        path: "",
-        component: EvaluationComponent
-      }
-    ]
-  }
+        path: '',
+        component: EvaluationComponent,
+      },
+    ],
+  },
 ];

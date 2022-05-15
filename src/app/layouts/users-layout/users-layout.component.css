@@ -1,8 +1,8 @@
-mat-sidenav-container{
-    height: 100%;
+mat-sidenav-container {
+  height: 100%;
 }
 
-mat-sidenav{
-    background-color: #35944b;
-    color: white;
+mat-sidenav {
+  background-color: #35944b;
+  color: white;
 }

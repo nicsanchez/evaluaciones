@@ -7,45 +7,51 @@ import { PermissionsGuard } from './guards/permissions.guard';
 
 const routes: Routes = [
   {
-    path: "",
-    redirectTo: "login",
-    pathMatch: "full"
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
   },
   {
-    path: "",
+    path: '',
     component: UsersLayoutComponent,
     canActivateChild: [AuthGuard],
     children: [
       {
         path: '',
         canActivateChild: [PermissionsGuard],
-        children: 
-        [
+        children: [
           {
-            path:'',
-            loadChildren: () => import('./pages/users/users.module').then(x => x.UsersModule)
+            path: '',
+            loadChildren: () =>
+              import('./pages/users/users.module').then((x) => x.UsersModule),
           },
           {
             path: '',
-            loadChildren: () => import('./pages/logs/logs.module').then(x => x.LogsModule)
-          }
-        ]
+            loadChildren: () =>
+              import('./pages/logs/logs.module').then((x) => x.LogsModule),
+          },
+        ],
       },
       {
         path: '',
-        children: 
-        [
+        children: [
           {
-            path:'',
-            loadChildren: () => import('./pages/evaluations/evaluation.module').then(x => x.EvaluationsModule)
+            path: '',
+            loadChildren: () =>
+              import('./pages/evaluations/evaluation.module').then(
+                (x) => x.EvaluationsModule
+              ),
           },
           {
             path: '',
-            loadChildren: () => import('./pages/my-profile/my-profile.module').then(x => x.MyProfileModule)
+            loadChildren: () =>
+              import('./pages/my-profile/my-profile.module').then(
+                (x) => x.MyProfileModule
+              ),
           },
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
   {
     path: '',
@@ -53,18 +59,19 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('./pages/login/users.module').then(x => x.LoginModule)
-      }
-    ]
+        loadChildren: () =>
+          import('./pages/login/users.module').then((x) => x.LoginModule),
+      },
+    ],
   },
   {
-    path: "**",
-    redirectTo: "login"
-  }
+    path: '**',
+    redirectTo: 'login',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -1,24 +1,23 @@
 import { Injectable } from '@angular/core';
-import { CanActivateChild, Router} from '@angular/router';
+import { CanActivateChild, Router } from '@angular/router';
 import { LoginServiceService } from '../services/login-service.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PermissionsGuard implements CanActivateChild {
-  
-  constructor(private router:Router, private loginService:LoginServiceService){}
+  constructor(
+    private router: Router,
+    private loginService: LoginServiceService
+  ) {}
 
-  canActivateChild(){
+  canActivateChild() {
     let rol = this.loginService.getGlobalRol();
-    if(rol === 'ADMIN'){
+    if (rol === 'ADMIN') {
       return true;
-    }else{
+    } else {
       this.router.navigate(['/evaluations']);
-      return false; 
+      return false;
     }
   }
-  
-
-
 }

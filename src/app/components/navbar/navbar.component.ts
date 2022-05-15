@@ -6,26 +6,24 @@ import { LoginServiceService } from 'src/app/services/login-service.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
-
   constructor(
     private loginService: LoginServiceService,
     private router: Router
-    ) { }
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  logout(){
+  logout() {
     let data = {
       token: localStorage.getItem('token'),
-    }
+    };
     this.loginService.logout(data);
   }
 
-  goToMyProfile(){
+  goToMyProfile() {
     this.router.navigate(['my-profile']);
   }
 }

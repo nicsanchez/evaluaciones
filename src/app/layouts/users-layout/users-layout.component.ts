@@ -6,12 +6,10 @@ import { LoginServiceService } from 'src/app/services/login-service.service';
 @Component({
   selector: 'app-users-layout',
   templateUrl: './users-layout.component.html',
-  styleUrls: ['./users-layout.component.css']
+  styleUrls: ['./users-layout.component.css'],
 })
 export class UsersLayoutComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

@@ -4,15 +4,13 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 @Component({
   selector: 'app-errors',
   templateUrl: './errors.component.html',
-  styleUrls: ['./errors.component.css']
+  styleUrls: ['./errors.component.css'],
 })
 export class ErrorsComponent implements OnInit {
-
-  public errors:any[] = [];
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
+  public errors: any[] = [];
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit(): void {
     this.errors = this.data.errors;
   }
-
 }

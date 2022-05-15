@@ -4,17 +4,24 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { ToastrService } from 'ngx-toastr';
 import { EvaluationsService } from 'src/app/services/evaluations.service';
+import { LoginServiceService } from 'src/app/services/login-service.service';
 import { DownloadComponent } from '../modals/download/download.component';
 import { UploadComponent } from '../modals/upload/upload.component';
-
+import { throwErrorAndLogout } from 'src/utils/permissions.utils';
 @Component({
   selector: 'app-evaluation',
   templateUrl: './evaluation.component.html',
-  styleUrls: ['./evaluation.component.css']
+  styleUrls: ['./evaluation.component.css'],
 })
 export class EvaluationComponent implements OnInit {
-
-  public displayedColumns: string[] = ['position', 'name', 'document', 'filename', 'created_at','actions'];
+  public displayedColumns: string[] = [
+    'position',
+    'name',
+    'document',
+    'filename',
+    'created_at',
+    'actions',
+  ];
   public dataSource = [];
   public itemsPerPage = 5;
   public page = 0;
@@ -22,24 +29,38 @@ export class EvaluationComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   public form: FormGroup;
   public loading = false;
+  public isAdmin = false;
 
-  constructor(private dialog: MatDialog, private evaluationsService: EvaluationsService, private toastrService:ToastrService,private fb: FormBuilder) { }
+  constructor(
+    private dialog: MatDialog,
+    private evaluationsService: EvaluationsService,
+    private toastrService: ToastrService,
+    private fb: FormBuilder,
+    private loginService: LoginServiceService
+  ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.getEvaluations();
   }
 
-  buildForm(){
+  buildForm() {
     this.form = this.fb.group({
-      search: ['',[Validators.min(100000),Validators.max(999999999999999),Validators.pattern('[0-9]+')]],
+      search: [
+        '',
+        [
+          Validators.min(100000),
+          Validators.max(999999999999999),
+          Validators.pattern('[0-9]+'),
+        ],
+      ],
     });
   }
 
-  uploadEvaluations(){
+  uploadEvaluations() {
     const dialogRef = this.dialog.open(UploadComponent, {
       width: '500px',
-      disableClose: true
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -51,67 +72,116 @@ export class EvaluationComponent implements OnInit {
     });
   }
 
-  downloadMultipleEvaluations(){
+  downloadMultipleEvaluations() {
     this.dialog.open(DownloadComponent, {
       width: '500px',
-      disableClose: true
+      disableClose: true,
     });
   }
 
-  getEvaluations(){
-    if(this.form.valid){
+  getEvaluations() {
+    if (this.form.valid) {
       let data = {
         token: localStorage.getItem('token'),
         itemsPerPage: this.itemsPerPage,
-        search: this.form.value.search
-      }
+        search: this.form.value.search,
+      };
       this.loading = true;
-      this.evaluationsService.getEvaluations(data,this.page).subscribe(
-        (response:any) => {
+      this.evaluationsService.getEvaluations(data, this.page).subscribe(
+        (response: any) => {
           this.loading = false;
-          if(response.status == 200){
+          if (response.status == 200) {
             this.dataSource = response.data.data;
             this.total = response.data.total;
-            if(this.total == 0){
-              this.toastrService.warning('No se encontraron evaluaciones.','Advertencia');
+            if (this.total == 0) {
+              this.toastrService.warning(
+                'No se encontraron evaluaciones.',
+                'Advertencia'
+              );
             }
-          }else{
-            this.toastrService.error('No fue posible obtenerse las evaluaciones cargadas en el servidor','Error');
+          } else {
+            this.toastrService.error(
+              'No fue posible obtenerse las evaluaciones cargadas en el servidor',
+              'Error'
+            );
           }
         },
         () => {
           this.loading = false;
-          this.toastrService.error('Ocurrió un error al obtenerse las evaluaciones cargadas en el servidor','Error');
+          this.toastrService.error(
+            'Ocurrió un error al obtenerse las evaluaciones cargadas en el servidor',
+            'Error'
+          );
         }
       );
     }
   }
 
-  changePage(event:any){
-    this.page = event.pageIndex+1;
+  changePage(event: any) {
+    this.page = event.pageIndex + 1;
     this.itemsPerPage = event.pageSize;
     this.getEvaluations();
   }
 
-  download(name:any,filename:any){
+  download(name: any, filename: any) {
     let data = {
       token: localStorage.getItem('token'),
       filename,
-    }
+    };
     this.evaluationsService.downloadFileByFilename(data).subscribe(
-      (response:any) => {
-        if(response.status == 200){
-          var a = document.createElement("a");
-          a.href = "data:application/pdf;base64," + response.data;
-          a.download = name+'.pdf';
+      (response: any) => {
+        if (response.status == 200) {
+          var a = document.createElement('a');
+          a.href = 'data:application/pdf;base64,' + response.data;
+          a.download = name + '.pdf';
           a.click();
-        }else{
-          this.toastrService.error('No fue posible descargarse la evaluacion cargada en el servidor','Error');
+        } else {
+          this.toastrService.error(
+            'No fue posible descargarse la evaluacion cargada en el servidor',
+            'Error'
+          );
         }
       },
       () => {
-        this.toastrService.error('Ocurrió un error al descargarse la evaluacion cargada en el servidor','Error');
+        this.toastrService.error(
+          'Ocurrió un error al descargarse la evaluacion cargada en el servidor',
+          'Error'
+        );
       }
     );
+  }
+
+  ngAfterViewInit() {
+    this.getPermissions();
+  }
+
+  getPermissions() {
+    const data = {
+      token: localStorage.getItem('token'),
+    };
+    this.loginService.getPermissions(data).subscribe(
+      (response: any) => {
+        this.setAdminRole(response, data);
+      },
+      () => {
+        const errorMessage =
+          'Ocurrió un error al obtenerse los permisos del usuario en el aplicativo.';
+        throwErrorAndLogout(data, errorMessage, this);
+      }
+    );
+  }
+
+  setAdminRole(response: any, data: any) {
+    if (response.status == 200) {
+      if (response.data['0']['key'] == 'ADMIN') {
+        this.isAdmin = true;
+      } else {
+        this.isAdmin = false;
+      }
+    } else {
+      const errorMessage =
+        'No fue posible obtenerse los permisos del usuario en el aplicativo.';
+      throwErrorAndLogout(data, errorMessage, this);
+    }
   }
 }

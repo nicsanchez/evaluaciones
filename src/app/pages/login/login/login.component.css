@@ -1,43 +1,42 @@
-.bg-img{
-    background-image: url('../../../../assets/images/fondo.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+.bg-img {
+  background-image: url("../../../../assets/images/fondo.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
-.card-class{
-    border-radius: 1rem;
-    background-color: rgba(255, 255, 255, 0.7);
+.card-class {
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 mat-form-field {
-    width: 100%;
+  width: 100%;
 }
 
-.login-title{
-    font-family: 'Roboto-Slab-Light', serif !important;
-    font-weight: bold;
-    color: #026937;
+.login-title {
+  font-family: "Roboto-Slab-Light", serif !important;
+  font-weight: bold;
+  color: #026937;
 }
 
-.login-form{
-    font-family: 'Roboto-Slab-Light', serif !important; 
+.login-form {
+  font-family: "Roboto-Slab-Light", serif !important;
 }
 
-.login-form-submit{
-    background-color: #026937;
-    color: white;
+.login-form-submit {
+  background-color: #026937;
+  color: white;
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
-    color: #026937 !important;
+  color: #026937 !important;
 }
 
 ::ng-deep.mat-form-field-outline {
-    color: #026937 !important;
-} 
-
-::ng-deep.mat-form-field-ripple {
-    background-color: #026937 !important;;
+  color: #026937 !important;
 }
 
+::ng-deep.mat-form-field-ripple {
+  background-color: #026937 !important;
+}

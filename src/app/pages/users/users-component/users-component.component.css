@@ -1,40 +1,39 @@
 .tabla {
-    width: 100% !important;
+  width: 100% !important;
 }
 
-.add{
-    background-color: #026937;
-    color: white;
+.add {
+  background-color: #026937;
+  color: white;
 }
 
-.card-title{
-    font-family: 'Roboto-Regular', serif;
-    font-size: 30px;
-    color: #026937;
+.card-title {
+  font-family: "Roboto-Regular", serif;
+  font-size: 30px;
+  color: #026937;
 }
 
-.tabla-header{
-    font-family: 'Roboto-Regular', serif;
-    color: #026937;
-    font-size: 15px;
+.tabla-header {
+  font-family: "Roboto-Regular", serif;
+  color: #026937;
+  font-size: 15px;
 }
 
-.tabla-item{
-    font-family: 'Roboto-Slab-Light', serif;
-    color: black;  
-    font-size: 13px;
+.tabla-item {
+  font-family: "Roboto-Slab-Light", serif;
+  color: black;
+  font-size: 13px;
 }
 
-.tabla-edit{
-    background-color: #0e7774;
+.tabla-edit {
+  background-color: #0e7774;
 }
 
 mat-form-field {
-    width: 100%;
+  width: 100%;
 }
 
-.search{
-    background-color: #8dc63f;
-    color: white;
+.search {
+  background-color: #8dc63f;
+  color: white;
 }
-

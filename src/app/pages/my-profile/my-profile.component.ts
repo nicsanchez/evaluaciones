@@ -6,58 +6,93 @@ import { UsersService } from 'src/app/services/users.service';
 @Component({
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
-  styleUrls: ['./my-profile.component.css']
+  styleUrls: ['./my-profile.component.css'],
 })
 export class MyProfileComponent implements OnInit {
   user = {
-    name:'',
-    lastname:'',
-    mail:'',
-    document:'',
-    username:'',
-    password:'',
+    name: '',
+    lastname: '',
+    mail: '',
+    document: '',
+    username: '',
+    password: '',
   };
   form: FormGroup;
   public loading: boolean = false;
 
-  constructor(private fb: FormBuilder, private toastrService: ToastrService,private userService: UsersService) { }
+  constructor(
+    private fb: FormBuilder,
+    private toastrService: ToastrService,
+    private userService: UsersService
+  ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.getMyInformation();
   }
 
-  buildForm(){
+  buildForm() {
     this.form = this.fb.group({
-      name: ['', [Validators.required,Validators.maxLength(50), Validators.pattern('^[a-zA-Zñ ÑáéíóúÁÉÍÓÚ]*$')]],
-      lastname: ['',  [Validators.required,Validators.maxLength(50), Validators.pattern('^[a-zA-Zñ ÑáéíóúÁÉÍÓÚ]*$')]],
-      mail: ['',  [Validators.required,Validators.maxLength(50), Validators.email]],
-      document: ['', [Validators.required,Validators.min(100000),Validators.max(999999999999999)]],
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(50),
+          Validators.pattern('^[a-zA-Zñ ÑáéíóúÁÉÍÓÚ]*$'),
+        ],
+      ],
+      lastname: [
+        '',
+        [
+          Validators.required,
+          Validators.maxLength(50),
+          Validators.pattern('^[a-zA-Zñ ÑáéíóúÁÉÍÓÚ]*$'),
+        ],
+      ],
+      mail: [
+        '',
+        [Validators.required, Validators.maxLength(50), Validators.email],
+      ],
+      document: [
+        '',
+        [
+          Validators.required,
+          Validators.min(100000),
+          Validators.max(999999999999999),
+        ],
+      ],
       username: ['', [Validators.required]],
-      password: ['']
+      password: [''],
     });
   }
 
-  getMyInformation(){
+  getMyInformation() {
     let data = {
-      token: localStorage.getItem('token')
-    }
+      token: localStorage.getItem('token'),
+    };
     this.userService.getUser(data).subscribe(
-      (response:any) => {
-        if(response.status == 200){
+      (response: any) => {
+        if (response.status == 200) {
           this.updateForm(response.data[0]);
-        }else{
-          this.toastrService.error('No fue posible obtenerse la información personal.','Error');
+        } else {
+          this.toastrService.error(
+            'No fue posible obtenerse la información personal.',
+            'Error'
+          );
         }
-      }, () =>{
-        this.toastrService.error('Ocurrio un error al obtenerse la información personal.','Error');
+      },
+      () => {
+        this.toastrService.error(
+          'Ocurrio un error al obtenerse la información personal.',
+          'Error'
+        );
       }
     );
   }
 
   /* Método usado para actualizar la información personal del usuario en sesión*/
-  updatePersonalData(){
-    if(this.form.valid){
+  updatePersonalData() {
+    if (this.form.valid) {
       let data = {
         token: localStorage.getItem('token'),
         data: {
@@ -67,45 +102,69 @@ export class MyProfileComponent implements OnInit {
           email: this.form.controls['mail'].value,
           password: this.form.controls['password'].value,
           document: this.form.controls['document'].value,
-        }
-      }
+        },
+      };
       this.loading = true;
       this.userService.updatePersonalData(data).subscribe(
-        (response:any) => {
+        (response: any) => {
           this.loading = false;
-          if(response.status == 200){
+          if (response.status == 200) {
             this.getMyInformation();
-            this.toastrService.success('Se ha actualizado su información personal exitosamente','Exito');
-          }else{
-            this.toastrService.error('No fue posible actualizarse su información personal','Error');
+            this.toastrService.success(
+              'Se ha actualizado su información personal exitosamente',
+              'Exito'
+            );
+          } else {
+            this.toastrService.error(
+              'No fue posible actualizarse su información personal',
+              'Error'
+            );
           }
         },
         (error) => {
           this.loading = false;
-          if(error.status == 422){
+          if (error.status == 422) {
             let errors = '<ul>';
-            if(error.error.errors['data.username'] !== null && error.error.errors['data.username'] !== undefined){
-              errors += '<li>El campo usuario ya está registrado en base de datos.</li>';
+            if (
+              error.error.errors['data.username'] !== null &&
+              error.error.errors['data.username'] !== undefined
+            ) {
+              errors +=
+                '<li>El campo usuario ya está registrado en base de datos.</li>';
             }
 
-            if(error.error.errors['data.email'] !== null && error.error.errors['data.email'] !== undefined){
-              errors += '<li>El campo correo electrónico ya está registrado en base de datos.</li>';
+            if (
+              error.error.errors['data.email'] !== null &&
+              error.error.errors['data.email'] !== undefined
+            ) {
+              errors +=
+                '<li>El campo correo electrónico ya está registrado en base de datos.</li>';
             }
 
-            if(error.error.errors['data.document'] !== null && error.error.errors['data.document'] !== undefined){
-              errors += '<li>El campo documento ya está registrado en base de datos.</li>';
+            if (
+              error.error.errors['data.document'] !== null &&
+              error.error.errors['data.document'] !== undefined
+            ) {
+              errors +=
+                '<li>El campo documento ya está registrado en base de datos.</li>';
             }
             errors += '</ul>';
-            this.toastrService.error(errors,'Listado de Errores',{ closeButton: true, enableHtml: true })
-          }else{
-            this.toastrService.error('Ocurrió un error al actualizarse su información personal','Error');
+            this.toastrService.error(errors, 'Listado de Errores', {
+              closeButton: true,
+              enableHtml: true,
+            });
+          } else {
+            this.toastrService.error(
+              'Ocurrió un error al actualizarse su información personal',
+              'Error'
+            );
           }
         }
-      )
-    } 
+      );
+    }
   }
 
-  updateForm(data:any){
+  updateForm(data: any) {
     this.form.controls['name'].setValue(data.name);
     this.form.controls['lastname'].setValue(data.lastname);
     this.form.controls['username'].setValue(data.username);

@@ -1,21 +1,25 @@
 <h1 mat-dialog-title>Errores de validación</h1>
 <div mat-dialog-content>
-    <p>Los siguientes numeros de documento no están almacenados en base de datos:</p>
-    <table class="table table-hover">
-        <thead class="table-dark text-center">
-            <tr>
-                <th scope="col">Fila del documento</th>
-                <th scope="col">Cedula</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let error of errors">
-                <th scope="row" class="text-center">{{error.fila}}</th>
-                <th scope="row" class="text-center">{{error.cedula}}</th>
-            </tr>
-        </tbody>
-    </table>
+  <p>
+    Los siguientes numeros de documento no están almacenados en base de datos:
+  </p>
+  <table class="table table-hover">
+    <thead class="table-dark text-center">
+      <tr>
+        <th scope="col">Fila del documento</th>
+        <th scope="col">Cedula</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let error of errors">
+        <th scope="row" class="text-center">{{ error.fila }}</th>
+        <th scope="row" class="text-center">{{ error.cedula }}</th>
+      </tr>
+    </tbody>
+  </table>
 </div>
 <div mat-dialog-actions class="btn-center">
-    <button mat-raised-button class="btn btn-danger" matDialogClose>Cerrar</button>
+  <button mat-raised-button class="btn btn-danger" matDialogClose>
+    Cerrar
+  </button>
 </div>

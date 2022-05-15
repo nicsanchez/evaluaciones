@@ -1,16 +1,16 @@
-.sidebar-menu{
-    padding:0px 25px!important;
+.sidebar-menu {
+  padding: 0px 25px !important;
 }
 
-mat-nav-list mat-list-item{
-    color: white !important;
-    font-family: 'Roboto-Slab-Light', serif;
+mat-nav-list mat-list-item {
+  color: white !important;
+  font-family: "Roboto-Slab-Light", serif;
 }
 
-mat-nav-list mat-list-item:hover{
-    background-color: #8dc63f !important;
+mat-nav-list mat-list-item:hover {
+  background-color: #8dc63f !important;
 }
 
-.active{
-    background-color: #8dc63f !important;
+.active {
+  background-color: #8dc63f !important;
 }
