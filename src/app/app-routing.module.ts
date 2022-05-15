@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { UsersLayoutComponent } from './layouts/users-layout/users-layout.component';
-import { AuthGuard } from './services/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { PermissionsGuard } from './guards/permissions.guard';
 
 const routes: Routes = [
   {
@@ -16,20 +17,33 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
     children: [
       {
-        path:'',
-        loadChildren: () => import('./pages/users/users.module').then(x => x.UsersModule)
-      },
-      {
-        path:'',
-        loadChildren: () => import('./pages/evaluations/evaluation.module').then(x => x.EvaluationsModule)
+        path: '',
+        canActivateChild: [PermissionsGuard],
+        children: 
+        [
+          {
+            path:'',
+            loadChildren: () => import('./pages/users/users.module').then(x => x.UsersModule)
+          },
+          {
+            path: '',
+            loadChildren: () => import('./pages/logs/logs.module').then(x => x.LogsModule)
+          }
+        ]
       },
       {
         path: '',
-        loadChildren: () => import('./pages/my-profile/my-profile.module').then(x => x.MyProfileModule)
-      },
-      {
-        path: '',
-        loadChildren: () => import('./pages/logs/logs.module').then(x => x.LogsModule)
+        children: 
+        [
+          {
+            path:'',
+            loadChildren: () => import('./pages/evaluations/evaluation.module').then(x => x.EvaluationsModule)
+          },
+          {
+            path: '',
+            loadChildren: () => import('./pages/my-profile/my-profile.module').then(x => x.MyProfileModule)
+          },
+        ]
       }
     ]
   },

@@ -44,8 +44,7 @@ export class LoginComponent implements OnInit {
         (success:any) => {
           this.loading = false;
           localStorage.setItem('token',success.token);
-          this.router.navigate(['users']);
-          this.toastrService.success('Ha iniciado sesión exitosamente.','Exito');
+          this.getPermissions(success.token)
         },
         (error) => {
           this.loading = false;
@@ -59,5 +58,27 @@ export class LoginComponent implements OnInit {
         }
       );
     };
+  }
+
+  getPermissions(token:any){
+    let data = {
+      token : token
+    }
+    this.loginService.getPermissions(data).subscribe(
+      (response:any) => {
+        if(response.status = 200){
+          this.loginService.setGlobalRol(response.data['0']['key']);
+          this.router.navigate(['evaluations']);
+          this.toastrService.success('Ha iniciado sesión exitosamente.','Exito');
+        }else{
+          this.toastrService.success('No fue posible obtenerse los permisos del usuario en el aplicativo.','Error');
+          this.loginService.logout(data);
+        }
+      },
+      () => {
+        this.toastrService.success('Ocurrió un error al obtenerse los permisos del usuario en el aplicativo.','Error');
+        this.loginService.logout(data);
+      }
+    );
   }
 }

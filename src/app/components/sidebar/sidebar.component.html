@@ -3,16 +3,8 @@
         <mat-icon mat-list-icon>menu</mat-icon>
         <span *ngIf="isExpanded">Menu</span>
     </mat-list-item>
-    <mat-list-item [routerLink]="['/users']" routerLinkActive="active" [ngClass]="{'sidebar-menu': isExpanded}">
-        <mat-icon mat-list-icon>people</mat-icon>
-        <span *ngIf="isExpanded">Usuarios</span>
-    </mat-list-item>
-    <mat-list-item [routerLink]="['/evaluations']" routerLinkActive="active" [ngClass]="{'sidebar-menu': isExpanded}">
-        <mat-icon mat-list-icon>summarize</mat-icon>
-        <span *ngIf="isExpanded">Evaluaciones</span>
-    </mat-list-item>
-    <mat-list-item [routerLink]="['/logs']" routerLinkActive="active" [ngClass]="{'sidebar-menu': isExpanded}">
-        <mat-icon mat-list-icon>visibility</mat-icon>
-        <span *ngIf="isExpanded">Realizar seguimiento</span>
+    <mat-list-item *ngFor="let menuItem of menuItems" [routerLink]="[menuItem.path]" routerLinkActive="active" [ngClass]="{'sidebar-menu': isExpanded}">
+        <mat-icon mat-list-icon>{{menuItem.icon}}</mat-icon>
+        <span *ngIf="isExpanded">{{menuItem.title}}</span>
     </mat-list-item>
 </mat-nav-list>
