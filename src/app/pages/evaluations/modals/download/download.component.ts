@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { EvaluationsService } from 'src/app/services/evaluations.service';
-import { ErrorsComponent } from '../errors/errors.component';
+import { ErrorsComponent } from './errors/errors.component';
 
 @Component({
   selector: 'app-download',

@@ -15,8 +15,9 @@ import { CommonModule } from '@angular/common';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { MatTableModule } from '@angular/material/table';
 import { DownloadComponent } from './modals/download/download.component';
-import { ErrorsComponent } from './modals/errors/errors.component';
+import { ErrorsComponent } from './modals/download/errors/errors.component';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { UploadErrorsComponent } from './modals/upload/errors/errors.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
     UploadComponent,
     DownloadComponent,
     ErrorsComponent,
+    UploadErrorsComponent,
   ],
   imports: [
     RouterModule.forChild(EvaluationRoutes),

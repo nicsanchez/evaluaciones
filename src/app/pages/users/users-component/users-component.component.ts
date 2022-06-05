@@ -17,6 +17,7 @@ export class UsersComponentComponent implements OnInit {
     'name',
     'username',
     'document',
+    'rolname',
     'mail',
     'actions',
   ];

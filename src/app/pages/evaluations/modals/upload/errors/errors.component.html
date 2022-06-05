@@ -1,0 +1,25 @@
+<h1 mat-dialog-title>Errores de validación</h1>
+<div mat-dialog-content>
+  <p>
+    Los siguientes archivos no son permitios, no cumplen con la sintaxis en el nombre del archivo (Nombre Docente-Cedula.pdf), Por favor corríjalos e intente nuevamente:
+  </p>
+  <table class="table table-hover">
+    <thead class="table-dark text-center">
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Nombre del archivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let error of errors">
+        <th scope="row" class="text-center">{{ error.numero }}</th>
+        <th scope="row" class="text-center">{{ error.filename }}.pdf</th>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div mat-dialog-actions class="btn-center">
+  <button mat-raised-button class="btn btn-danger" matDialogClose>
+    Cerrar
+  </button>
+</div>

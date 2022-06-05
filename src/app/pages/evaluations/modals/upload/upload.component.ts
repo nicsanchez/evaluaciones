@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { EvaluationsService } from 'src/app/services/evaluations.service';
+import { UploadErrorsComponent } from './errors/errors.component';
 
 @Component({
   selector: 'app-upload',
@@ -13,12 +14,13 @@ export class UploadComponent implements OnInit {
   form: FormGroup;
   public loading: boolean = false;
   public formDataAttachment = new FormData();
-  acceptFiles = ['.pdf', 'application/pdf'];
+  acceptFiles = ['.zip', 'application/x-zip-compressed'];
   constructor(
     private fb: FormBuilder,
     private toastrService: ToastrService,
     private evaluationsService: EvaluationsService,
-    private dialogRef: MatDialogRef<UploadComponent>
+    private dialogRef: MatDialogRef<UploadComponent>,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -27,29 +29,19 @@ export class UploadComponent implements OnInit {
 
   /* Método para validar la extensión y tamaño maximo del archivo adjunto*/
   onChangeFileInput() {
-    let files: any[] = [];
-    let errors = '<ul>';
-    let hasErrors = false;
+    let file = null;
     this.formDataAttachment = new FormData();
-    this.form.controls['file'].value.forEach((element: any) => {
-      if (!this.acceptFiles.includes(element.type)) {
-        hasErrors = true;
-        errors += '<li>' + element.name + '</li>';
-      } else {
-        files.push(element);
-        this.formDataAttachment.append(element.name, element);
-      }
-    });
-    errors += '</ul>';
-    if (hasErrors) {
+    const element = this.form.controls['file'].value;
+    if (!this.acceptFiles.includes(element.type)) {
       this.toastrService.error(
-        'Los siguientes archivos no son permitios, solo se admiten archivos con formato .pdf:' +
-          errors,
-        'Error',
-        { closeButton: true, enableHtml: true }
+        'El archivo adjunto no está permitido, solo se admiten archivos con formato .zip',
+        'Error'
       );
+    } else {
+      file = element;
+      this.formDataAttachment.append(element.name, element);
     }
-    this.form.controls['file'].setValue(files);
+    this.form.controls['file'].setValue(file);
   }
 
   /* Método para construir el formulario reactivo*/
@@ -79,17 +71,13 @@ export class UploadComponent implements OnInit {
                 response.errors != undefined &&
                 response.errors.length != 0
               ) {
-                let errors = '<ul>';
-                response.errors.forEach((element: any) => {
-                  errors += '<li>' + element + '</li>';
+                this.dialog.open(UploadErrorsComponent, {
+                  width: '500px',
+                  disableClose: true,
+                  data: {
+                    errors: response.errors,
+                  },
                 });
-                errors += '</ul>';
-                this.toastrService.error(
-                  'Los siguientes archivos no son permitios, no cumplen con la sintaxis en el nombre del archivo (Nombre Docente-Cedula.pdf):' +
-                    errors,
-                  'Error',
-                  { closeButton: true, enableHtml: true }
-                );
               } else {
                 this.toastrService.error(
                   'No fue posible cargarse las evaluaciones',

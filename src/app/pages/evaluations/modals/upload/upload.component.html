@@ -8,9 +8,9 @@
           <mat-label>Archivo Adjunto</mat-label>
           <ngx-mat-file-input
             formControlName="file"
-            [multiple]="true"
+            [multiple]="false"
             (change)="onChangeFileInput()"
-            accept=".pdf,application/pdf"
+            accept=".zip,application/x-zip-compressed"
           ></ngx-mat-file-input>
           <mat-error *ngIf="form.controls['file'].hasError('required')"
             >Este campo es requerido</mat-error
