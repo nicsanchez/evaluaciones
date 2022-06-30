@@ -5,6 +5,7 @@ import { UsersService } from 'src/app/services/users.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateEditUsersComponent } from '../modals/create-edit-users/create-edit-users.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 
 @Component({
   selector: 'app-users-component',
@@ -131,6 +132,23 @@ export class UsersComponentComponent implements OnInit {
         this.getUsers();
       }
     });
+  }
+
+  openConfirmModal(id: any, username: string) {
+    this.dialog
+      .open(ConfirmComponent, {
+        width: '300px',
+        disableClose: true,
+        data: {
+          message: `Estas a punto de eliminar al usuario ${username}, tenga en cuenta que no será posible reestablecerse.`,
+        },
+      })
+      .afterClosed()
+      .subscribe((option: Boolean) => {
+        if (option) {
+          this.deleteUser(id);
+        }
+      });
   }
 
   deleteUser(id: any) {

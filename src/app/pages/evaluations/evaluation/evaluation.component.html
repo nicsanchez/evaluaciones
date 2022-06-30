@@ -183,7 +183,7 @@
                 mat-mini-fab
                 class="email-individual"
                 *ngIf="isAdmin && element.email != null"
-                (click)="sendEmail(element.document)"
+                (click)="openConfirmModal(element.document)"
               >
                 <mat-icon>email</mat-icon>
               </button>

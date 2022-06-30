@@ -1,0 +1,13 @@
+<h1 mat-dialog-title class="card-title">¿Estas seguro?</h1>
+
+<div mat-dialog-content>
+    <p class="card-body">{{message}}</p>
+</div>
+<div mat-dialog-actions class="btn-center">
+    <button mat-raised-button class="btn-danger" [mat-dialog-close]="false">
+        No
+    </button>
+    <button mat-raised-button class="btn-success" [mat-dialog-close]="true">
+        Si
+    </button>
+</div>

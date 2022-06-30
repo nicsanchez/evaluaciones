@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { EmailsService } from 'src/app/services/emails.service';
 import { EmailsErrorsComponent } from './errors/errors.component';
 
@@ -54,50 +55,67 @@ export class UpdateEmailsComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.loading = true;
-      this.emailsService
-        .storeEmailsByBulkFile(this.formDataAttachment)
-        .subscribe(
-          (response: any) => {
-            this.loading = false;
-            if (response.status == 200) {
-              if (
-                response.errors != null &&
-                response.errors != undefined &&
-                response.errors.length != 0
-              ) {
-                this.dialog.open(EmailsErrorsComponent, {
-                  width: '500px',
-                  disableClose: true,
-                  data: {
-                    errors: response.errors,
-                  },
-                });
-                this.toastrService.warning(
-                  'Se han cargado algunos de los correos electrónicos exitosamente.',
-                  'Advertencia'
-                );
-              } else {
-                this.toastrService.success(
-                  'Se han cargado los correos electrónicos exitosamente.',
-                  'Exito'
-                );
-              }
-              this.dialogRef.close('ok');
-            } else {
-              this.toastrService.error(
-                'No fue posible cargarse los correos electrónicos.',
-                'Error'
-              );
-            }
+      this.dialog
+        .open(ConfirmComponent, {
+          width: '300px',
+          disableClose: true,
+          data: {
+            message: `Estas a punto de actualizar el listado de correos de notificación para los docentes almacenados en base de datos.`,
           },
-          () => {
+        })
+        .afterClosed()
+        .subscribe((option: Boolean) => {
+          if (option) {
+            this.updateEmails();
+          } else {
             this.loading = false;
-            this.toastrService.error(
-              'Ocurrió un error al cargarse los correos electrónicos.',
-              'Error'
+          }
+        });
+    }
+  }
+
+  updateEmails() {
+    this.emailsService.storeEmailsByBulkFile(this.formDataAttachment).subscribe(
+      (response: any) => {
+        this.loading = false;
+        if (response.status == 200) {
+          if (
+            response.errors != null &&
+            response.errors != undefined &&
+            response.errors.length != 0
+          ) {
+            this.dialog.open(EmailsErrorsComponent, {
+              width: '500px',
+              disableClose: true,
+              data: {
+                errors: response.errors,
+              },
+            });
+            this.toastrService.warning(
+              'Se han cargado algunos de los correos electrónicos exitosamente.',
+              'Advertencia'
+            );
+          } else {
+            this.toastrService.success(
+              'Se han cargado los correos electrónicos exitosamente.',
+              'Exito'
             );
           }
+          this.dialogRef.close('ok');
+        } else {
+          this.toastrService.error(
+            'No fue posible cargarse los correos electrónicos.',
+            'Error'
+          );
+        }
+      },
+      () => {
+        this.loading = false;
+        this.toastrService.error(
+          'Ocurrió un error al cargarse los correos electrónicos.',
+          'Error'
         );
-    }
+      }
+    );
   }
 }

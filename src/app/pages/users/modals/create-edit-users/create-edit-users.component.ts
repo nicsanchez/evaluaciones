@@ -1,7 +1,12 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { RolesService } from 'src/app/services/roles.service';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -22,6 +27,7 @@ export class CreateEditUsersComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UsersService,
     private toastrService: ToastrService,
+    private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private rolesService: RolesService
   ) {}
@@ -76,10 +82,41 @@ export class CreateEditUsersComponent implements OnInit {
   /* Metodo usado para enviar el formulario */
   onSubmit() {
     if (this.form.valid) {
+      this.loading = true;
       if (this.editing) {
-        this.updateUser();
+        this.dialog
+          .open(ConfirmComponent, {
+            width: '300px',
+            disableClose: true,
+            data: {
+              message: `Estas a punto de actualizar la información personal del usuario ${this.form.controls['username'].value}.`,
+            },
+          })
+          .afterClosed()
+          .subscribe((option: Boolean) => {
+            if (option) {
+              this.updateUser();
+            } else {
+              this.loading = false;
+            }
+          });
       } else {
-        this.createNewUser();
+        this.dialog
+          .open(ConfirmComponent, {
+            width: '300px',
+            disableClose: true,
+            data: {
+              message: `Estas a punto darle acceso al aplicativo al usuario ${this.form.controls['username'].value}.`,
+            },
+          })
+          .afterClosed()
+          .subscribe((option: Boolean) => {
+            if (option) {
+              this.createNewUser();
+            } else {
+              this.loading = false;
+            }
+          });
       }
     }
   }
@@ -96,7 +133,6 @@ export class CreateEditUsersComponent implements OnInit {
       rol: this.form.controls['rol'].value,
       token: localStorage.getItem('token'),
     };
-    this.loading = true;
     this.userService.createUser(data).subscribe(
       (response: any) => {
         this.loading = false;
@@ -170,7 +206,6 @@ export class CreateEditUsersComponent implements OnInit {
         rol: this.form.controls['rol'].value,
       },
     };
-    this.loading = true;
     this.userService.updateUser(data).subscribe(
       (response: any) => {
         this.loading = false;

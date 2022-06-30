@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 import { EmailsService } from 'src/app/services/emails.service';
 import { MassiveEmailsErrorsComponent } from './errors/errors.component';
 
@@ -54,64 +55,83 @@ export class sendMassiveEmailsComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.loading = true;
-      this.emailsService
-        .sendEvaluationsMailsToMultipleUsers(this.formDataAttachment)
-        .subscribe(
-          (response: any) => {
-            this.loading = false;
-            if (response.status == 200) {
-              if (
-                response.errors != null &&
-                response.errors != undefined &&
-                response.errors.length != 0
-              ) {
-                this.dialog.open(MassiveEmailsErrorsComponent, {
-                  width: '500px',
-                  disableClose: true,
-                  data: {
-                    errors: response.errors,
-                  },
-                });
-                if (response.sendMails) {
-                  this.toastrService.warning(
-                    'Se han enviado algunas evaluaciones via correo electrónico exitosamente.',
-                    'Advertencia'
-                  );
-                } else {
-                  this.toastrService.error(
-                    'No se envió ninguna evaluación asociada a las cédulas ingresadas.',
-                    'Error'
-                  );
-                }
-              } else {
-                if (response.sendMails) {
-                  this.toastrService.success(
-                    'Se han enviado las evaluaciones via correo electrónico exitosamente.',
-                    'Exito'
-                  );
-                } else {
-                  this.toastrService.error(
-                    'El documento ingresado no contiene ninguna cédula.',
-                    'Error'
-                  );
-                }
-              }
-              this.dialogRef.close('ok');
-            } else {
-              this.toastrService.error(
-                'No fue posible enviarse las evaluaciones via correo electrónico.',
-                'Error'
-              );
-            }
+      this.dialog
+        .open(ConfirmComponent, {
+          width: '300px',
+          disableClose: true,
+          data: {
+            message: `Estas a punto de enviar masivamente las evaluaciones docente a los documentos listados en el archivo excel.`,
           },
-          () => {
+        })
+        .afterClosed()
+        .subscribe((option: Boolean) => {
+          if (option) {
+            this.sendMassiveEvaluations();
+          } else {
             this.loading = false;
+          }
+        });
+    }
+  }
+
+  sendMassiveEvaluations() {
+    this.emailsService
+      .sendEvaluationsMailsToMultipleUsers(this.formDataAttachment)
+      .subscribe(
+        (response: any) => {
+          this.loading = false;
+          if (response.status == 200) {
+            if (
+              response.errors != null &&
+              response.errors != undefined &&
+              response.errors.length != 0
+            ) {
+              this.dialog.open(MassiveEmailsErrorsComponent, {
+                width: '500px',
+                disableClose: true,
+                data: {
+                  errors: response.errors,
+                },
+              });
+              if (response.sendMails) {
+                this.toastrService.warning(
+                  'Se han enviado algunas evaluaciones via correo electrónico exitosamente.',
+                  'Advertencia'
+                );
+              } else {
+                this.toastrService.error(
+                  'No se envió ninguna evaluación asociada a las cédulas ingresadas.',
+                  'Error'
+                );
+              }
+            } else {
+              if (response.sendMails) {
+                this.toastrService.success(
+                  'Se han enviado las evaluaciones via correo electrónico exitosamente.',
+                  'Exito'
+                );
+              } else {
+                this.toastrService.error(
+                  'El documento ingresado no contiene ninguna cédula.',
+                  'Error'
+                );
+              }
+            }
+            this.dialogRef.close('ok');
+          } else {
             this.toastrService.error(
-              'Ocurrió un error al enviarse las evaluaciones via correo electrónico.',
+              'No fue posible enviarse las evaluaciones via correo electrónico.',
               'Error'
             );
           }
-        );
-    }
+        },
+        () => {
+          this.loading = false;
+          this.toastrService.error(
+            'Ocurrió un error al enviarse las evaluaciones via correo electrónico.',
+            'Error'
+          );
+        }
+      );
   }
 }

@@ -6,7 +6,7 @@
     <mat-card-content class="mt-4">
       <form
         role="form"
-        (ngSubmit)="updatePersonalData()"
+        (ngSubmit)="onSubmit()"
         [formGroup]="form"
         autocomplete="off"
       >
@@ -21,6 +21,15 @@
                   placeholder="Ingrese los nombres"
                   type="text"
                 />
+                <mat-error *ngIf="form.controls['name'].hasError('required')"
+                  >Este campo es requerido</mat-error
+                >
+                <mat-error *ngIf="form.controls['name'].hasError('pattern')"
+                  >Este campo es de tipo texto</mat-error
+                >
+                <mat-error *ngIf="form.controls['name'].hasError('maxlength')"
+                  >Este campo no debe superar 50 caracteres</mat-error
+                >
               </mat-form-field>
             </div>
             <div class="col-6">
@@ -32,6 +41,15 @@
                   placeholder="Ingrese los apellidos"
                   type="text"
                 />
+                <mat-error *ngIf="form.controls['lastname'].hasError('required')"
+                  >Este campo es requerido</mat-error
+                >
+                <mat-error *ngIf="form.controls['lastname'].hasError('pattern')"
+                  >Este campo es de tipo texto</mat-error
+                >
+                <mat-error *ngIf="form.controls['lastname'].hasError('maxlength')"
+                  >Este campo no debe superar 50 caracteres</mat-error
+                >
               </mat-form-field>
             </div>
           </div>
@@ -45,6 +63,15 @@
                   placeholder="Ingrese el correo"
                   type="text"
                 />
+                <mat-error *ngIf="form.controls['mail'].hasError('required')"
+                  >Este campo es requerido</mat-error
+                >
+                <mat-error *ngIf="form.controls['mail'].hasError('email')"
+                  >Este campo es de tipo correo electrónico</mat-error
+                >
+                <mat-error *ngIf="form.controls['mail'].hasError('maxlength')"
+                  >Este campo no debe superar 50 caracteres</mat-error
+                >
               </mat-form-field>
             </div>
             <div class="col-6">
@@ -56,6 +83,15 @@
                   placeholder="Ingrese el numero de documento"
                   type="number"
                 />
+                <mat-error *ngIf="form.controls['document'].hasError('required')"
+                  >Este campo es requerido</mat-error
+                >
+                <mat-error *ngIf="form.controls['document'].hasError('min')"
+                  >Este campo debe superar 6 caracteres</mat-error
+                >
+                <mat-error *ngIf="form.controls['document'].hasError('max')"
+                  >Este campo no debe superar 15 caracteres</mat-error
+                >
               </mat-form-field>
             </div>
           </div>
@@ -69,6 +105,9 @@
                   placeholder="Ingrese el usuario"
                   type="text"
                 />
+                <mat-error *ngIf="form.controls['username'].hasError('required')"
+                  >Este campo es requerido</mat-error
+                >
               </mat-form-field>
             </div>
             <div class="col-12">

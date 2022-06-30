@@ -11,6 +11,7 @@ import { throwErrorAndLogout } from 'src/utils/permissions.utils';
 import { UpdateEmailsComponent } from '../modals/updateEmails/updateEmails.component';
 import { EmailsService } from 'src/app/services/emails.service';
 import { sendMassiveEmailsComponent } from '../modals/sendMassiveEmails/sendMassiveEmails.component';
+import { ConfirmComponent } from 'src/app/components/confirm/confirm.component';
 @Component({
   selector: 'app-evaluation',
   templateUrl: './evaluation.component.html',
@@ -174,7 +175,24 @@ export class EvaluationComponent implements OnInit {
     );
   }
 
-  sendEmail(document: any) {
+  openConfirmModal(document: any) {
+    this.dialog
+      .open(ConfirmComponent, {
+        width: '300px',
+        disableClose: true,
+        data: {
+          message: `Estas a punto de enviar un correo electronico al docente con cedula ${document}.`,
+        },
+      })
+      .afterClosed()
+      .subscribe((option: Boolean) => {
+        if (option) {
+          this.sendMail(document);
+        }
+      });
+  }
+
+  sendMail(document: any) {
     let data = {
       token: localStorage.getItem('token'),
       document,

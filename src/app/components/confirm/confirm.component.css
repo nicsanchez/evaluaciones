@@ -1,0 +1,18 @@
+.card-title {
+    font-family: "Roboto-Regular", serif;
+    font-size: 30px;
+    color: #026937;
+    text-align: center;
+}
+
+.btn-center {
+    text-align: center;
+    display: block;
+}
+
+.card-body {
+    font-family: "Roboto-Slab-Light", serif;
+    color: black;
+    font-size: 13px;
+    text-align: justify;
+}
