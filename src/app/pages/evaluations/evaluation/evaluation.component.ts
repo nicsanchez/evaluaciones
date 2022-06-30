@@ -8,6 +8,9 @@ import { LoginServiceService } from 'src/app/services/login-service.service';
 import { DownloadComponent } from '../modals/download/download.component';
 import { UploadComponent } from '../modals/upload/upload.component';
 import { throwErrorAndLogout } from 'src/utils/permissions.utils';
+import { UpdateEmailsComponent } from '../modals/updateEmails/updateEmails.component';
+import { EmailsService } from 'src/app/services/emails.service';
+import { sendMassiveEmailsComponent } from '../modals/sendMassiveEmails/sendMassiveEmails.component';
 @Component({
   selector: 'app-evaluation',
   templateUrl: './evaluation.component.html',
@@ -34,6 +37,7 @@ export class EvaluationComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private evaluationsService: EvaluationsService,
+    private emailsService: EmailsService,
     private toastrService: ToastrService,
     private fb: FormBuilder,
     private loginService: LoginServiceService
@@ -74,6 +78,28 @@ export class EvaluationComponent implements OnInit {
 
   downloadMultipleEvaluations() {
     this.dialog.open(DownloadComponent, {
+      width: '500px',
+      disableClose: true,
+    });
+  }
+
+  updateEmails() {
+    const dialogRef = this.dialog.open(UpdateEmailsComponent, {
+      width: '500px',
+      disableClose: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'ok') {
+        this.page = 0;
+        this.total = 0;
+        this.getEvaluations();
+      }
+    });
+  }
+
+  openMassiveEmailsModal() {
+    this.dialog.open(sendMassiveEmailsComponent, {
       width: '500px',
       disableClose: true,
     });
@@ -142,6 +168,34 @@ export class EvaluationComponent implements OnInit {
       () => {
         this.toastrService.error(
           'Ocurrió un error al descargarse la evaluacion cargada en el servidor',
+          'Error'
+        );
+      }
+    );
+  }
+
+  sendEmail(document: any) {
+    let data = {
+      token: localStorage.getItem('token'),
+      document,
+    };
+    this.emailsService.sendEvaluationMailToUserByDocument(data).subscribe(
+      (response: any) => {
+        if (response.status == 200) {
+          this.toastrService.success(
+            'Se ha enviado la evaluación al docente exitosamente.',
+            'Exito'
+          );
+        } else {
+          this.toastrService.error(
+            'No fue posible enviarse la evaluacion al docente',
+            'Error'
+          );
+        }
+      },
+      () => {
+        this.toastrService.error(
+          'Ocurrió un error al enviarse la evaluacion al docente',
           'Error'
         );
       }

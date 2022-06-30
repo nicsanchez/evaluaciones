@@ -2,10 +2,10 @@
   <mat-card class="mt-3">
     <mat-card-title>
       <div class="row">
-        <div class="col-8 col-md-10">
+        <div class="col-7 col-md-10">
           <h1 class="card-title">Listado de Evaluaciones</h1>
         </div>
-        <div class="col-4 col-md-2" align="end">
+        <div class="col-5 col-md-2" align="end">
           <button
             mat-mini-fab
             class="add"
@@ -20,6 +20,22 @@
             (click)="uploadEvaluations()"
           >
             <mat-icon>upload</mat-icon>
+          </button>
+          <button
+            mat-mini-fab
+            class="add-contact"
+            *ngIf="isAdmin"
+            (click)="updateEmails()"
+          >
+            <mat-icon>contacts</mat-icon>
+          </button>
+          <button
+            mat-mini-fab
+            class="massive-email"
+            *ngIf="isAdmin"
+            (click)="openMassiveEmailsModal()"
+          >
+            <mat-icon>forward_to_inbox</mat-icon>
           </button>
         </div>
       </div>
@@ -162,6 +178,14 @@
                 (click)="download(element.filename, element.hashname)"
               >
                 <mat-icon>download</mat-icon>
+              </button>
+              <button
+                mat-mini-fab
+                class="email-individual"
+                *ngIf="isAdmin && element.email != null"
+                (click)="sendEmail(element.document)"
+              >
+                <mat-icon>email</mat-icon>
               </button>
             </td>
           </ng-container>

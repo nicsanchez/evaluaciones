@@ -18,6 +18,10 @@ import { DownloadComponent } from './modals/download/download.component';
 import { ErrorsComponent } from './modals/download/errors/errors.component';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { UploadErrorsComponent } from './modals/upload/errors/errors.component';
+import { UpdateEmailsComponent } from './modals/updateEmails/updateEmails.component';
+import { EmailsErrorsComponent } from './modals/updateEmails/errors/errors.component';
+import { sendMassiveEmailsComponent } from './modals/sendMassiveEmails/sendMassiveEmails.component';
+import { MassiveEmailsErrorsComponent } from './modals/sendMassiveEmails/errors/errors.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +30,10 @@ import { UploadErrorsComponent } from './modals/upload/errors/errors.component';
     DownloadComponent,
     ErrorsComponent,
     UploadErrorsComponent,
+    UpdateEmailsComponent,
+    EmailsErrorsComponent,
+    sendMassiveEmailsComponent,
+    MassiveEmailsErrorsComponent,
   ],
   imports: [
     RouterModule.forChild(EvaluationRoutes),

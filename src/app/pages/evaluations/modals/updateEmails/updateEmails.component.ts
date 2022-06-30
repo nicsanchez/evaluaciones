@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
-import { EvaluationsService } from 'src/app/services/evaluations.service';
-import { ErrorsComponent } from './errors/errors.component';
+import { EmailsService } from 'src/app/services/emails.service';
+import { EmailsErrorsComponent } from './errors/errors.component';
 
 @Component({
-  selector: 'app-download',
-  templateUrl: './download.component.html',
-  styleUrls: ['./download.component.css'],
+  selector: 'app-update-emails',
+  templateUrl: './updateEmails.component.html',
+  styleUrls: ['./updateEmails.component.css'],
 })
-export class DownloadComponent implements OnInit {
+export class UpdateEmailsComponent implements OnInit {
   public loading: boolean = false;
   form: FormGroup;
   public formDataAttachment = new FormData();
@@ -23,8 +23,8 @@ export class DownloadComponent implements OnInit {
     private dialog: MatDialog,
     private toastrService: ToastrService,
     private fb: FormBuilder,
-    private evaluationsService: EvaluationsService,
-    private dialogRef: MatDialogRef<DownloadComponent>
+    private emailsService: EmailsService,
+    private dialogRef: MatDialogRef<UpdateEmailsComponent>
   ) {}
 
   ngOnInit(): void {
@@ -54,62 +54,38 @@ export class DownloadComponent implements OnInit {
   onSubmit() {
     if (this.form.valid) {
       this.loading = true;
-      this.evaluationsService
-        .downloadFilesByBulkFile(this.formDataAttachment)
+      this.emailsService
+        .storeEmailsByBulkFile(this.formDataAttachment)
         .subscribe(
           (response: any) => {
             this.loading = false;
             if (response.status == 200) {
               if (
-                response.evaluations != null &&
-                response.evaluations != undefined &&
-                response.evaluations.length != 0
-              ) {
-                var a = document.createElement('a');
-                a.href = 'data:text/plain;base64,' + response.evaluations;
-                a.download = 'Evaluaciones.zip';
-                a.click();
-              }
-              if (
                 response.errors != null &&
                 response.errors != undefined &&
                 response.errors.length != 0
               ) {
-                this.dialog.open(ErrorsComponent, {
+                this.dialog.open(EmailsErrorsComponent, {
                   width: '500px',
                   disableClose: true,
                   data: {
                     errors: response.errors,
                   },
                 });
-                if (response.downloadEvaluations) {
-                  this.toastrService.warning(
-                    'Se han descargado algunas evaluaciones exitosamente',
-                    'Advertencia'
-                  );
-                } else {
-                  this.toastrService.error(
-                    'No se ha descargado ninguna evaluación asociada a las cedulas ingresadas.',
-                    'Error'
-                  );
-                }
+                this.toastrService.warning(
+                  'Se han cargado algunos de los correos electrónicos exitosamente.',
+                  'Advertencia'
+                );
               } else {
-                if (response.downloadEvaluations) {
-                  this.toastrService.success(
-                    'Se han descargado las evaluaciones exitosamente',
-                    'Exito'
-                  );
-                } else {
-                  this.toastrService.error(
-                    'El documento ingresado no contiene ninguna cédula.',
-                    'Error'
-                  );
-                }
+                this.toastrService.success(
+                  'Se han cargado los correos electrónicos exitosamente.',
+                  'Exito'
+                );
               }
-              this.dialogRef.close();
+              this.dialogRef.close('ok');
             } else {
               this.toastrService.error(
-                'No fue posible descargarse las evaluaciones',
+                'No fue posible cargarse los correos electrónicos.',
                 'Error'
               );
             }
@@ -117,7 +93,7 @@ export class DownloadComponent implements OnInit {
           () => {
             this.loading = false;
             this.toastrService.error(
-              'Ocurrió un error al descargarse las evaluaciones',
+              'Ocurrió un error al cargarse los correos electrónicos.',
               'Error'
             );
           }

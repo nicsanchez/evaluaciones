@@ -8,8 +8,23 @@
   color: white;
 }
 
+.massive-email {
+  background-color: #0e7774;
+  color: white;
+}
+
+.add-contact {
+  background-color: #3ebdac;
+  color: white;
+}
+
 .download-individual {
   background-color: #35944b;
+  color: white;
+}
+
+.email-individual {
+  background-color: #f9a12c;
   color: white;
 }
 
