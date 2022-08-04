@@ -32,7 +32,6 @@
           <button
             mat-mini-fab
             class="massive-email"
-            *ngIf="isAdmin"
             (click)="openMassiveEmailsModal()"
           >
             <mat-icon>forward_to_inbox</mat-icon>
@@ -182,7 +181,7 @@
               <button
                 mat-mini-fab
                 class="email-individual"
-                *ngIf="isAdmin && element.email != null"
+                *ngIf="element.email != null"
                 (click)="openConfirmModal(element.document)"
               >
                 <mat-icon>email</mat-icon>
